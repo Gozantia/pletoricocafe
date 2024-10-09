@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SeleccionarProducto from './SeleccionarProducto';
+import TablaProductos from './tablaProductos'; // Importamos el nuevo componente
 
 function AgregarProductos({ mesa, volverClientesActivos }) {
     const [productosMesa, setProductosMesa] = useState([]);
@@ -27,37 +28,7 @@ function AgregarProductos({ mesa, volverClientesActivos }) {
         fetchProductos();
     }, [mesa.id]);
 
-    // Función para incrementar la cantidad de un producto
-    const incrementarCantidad = (index) => {
-        setProductosMesa((prevProductos) => {
-            const nuevosProductos = [...prevProductos];
-            nuevosProductos[index] = {
-                ...nuevosProductos[index],
-                cantidad: nuevosProductos[index].cantidad + 1 // Incrementa solo 1
-            };
-            return nuevosProductos;
-        });
-    };
-
-// Función para decrementar la cantidad de un producto
-const decrementarCantidad = (index) => {
-    setProductosMesa((prevProductos) => {
-        const nuevosProductos = [...prevProductos];
-        
-        // Solo restamos si la cantidad actual es mayor que 1
-        if (nuevosProductos[index].cantidad > 1) {
-            nuevosProductos[index] = {
-                ...nuevosProductos[index],
-                cantidad: nuevosProductos[index].cantidad - 1 // Resta solo 1
-            };
-        }
-
-        return nuevosProductos;
-    });
-};
-
-
-    // Función para calcular el total acumulado
+    // Función para calcular el total acumulado (usada en TablaProductos)
     const calcularTotalAcumulado = () => {
         return productosMesa.reduce((total, producto) => {
             return total + (producto.cantidad * producto.precio);
@@ -102,36 +73,12 @@ const decrementarCantidad = (index) => {
             {loading && <p>Cargando productos...</p>}
             {error && <p>{error}</p>}
 
-            {/* Tabla de productos de la mesa */}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {productosMesa.map((producto, index) => (
-                        <tr key={index}>
-                            <td>{producto.nombre}</td>
-                            <td>
-                                <button onClick={() => decrementarCantidad(index)}>-</button>
-                                {producto.cantidad} 
-                                <button onClick={() => incrementarCantidad(index)}>+</button>
-                            </td>
-                            <td>${producto.precio}</td>
-                            <td>${(producto.cantidad * producto.precio).toFixed(2)}</td>
-                        </tr>
-                    ))}
-                    {/* Fila para el total acumulado */}
-                    <tr>
-                        <td colSpan="3"><strong>Total</strong></td>
-                        <td>${calcularTotalAcumulado()}</td>
-                    </tr>
-                </tbody>
-            </table>
+            {/* Tabla de productos con el componente reutilizable */}
+            <TablaProductos 
+                productos={productosMesa} 
+                setProductos={setProductosMesa} 
+                calcularTotalAcumulado={calcularTotalAcumulado} 
+            />
 
             {/* Botón para actualizar la mesa */}
             <button onClick={handleActualizar} disabled={loading}>Actualizar</button>
