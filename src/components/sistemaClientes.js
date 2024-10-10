@@ -3,6 +3,7 @@ import ClientesActivos from './clientes-activos';
 import AgregarProductos from './agregarProductos';
 import Pagar from './pagar';
 import CrearCliente from './crearCliente';
+import ListaMesasPagadasHoy from './listaMesasPagadasHoy';
 function Sistema() {
 
   const [componenteActual, setComponenteActual] = useState('clientes-activos');
@@ -20,6 +21,9 @@ function Sistema() {
   const volverClientesActivos = () => {
     setComponenteActual('clientes-activos');
   };
+  const verListaMesasPagadasHoy = () => {
+    setComponenteActual('mesas-pagadas-hoy');
+  };
 
   // Función para cambiar al componente CrearCliente
   const handleCrearCliente = () => {
@@ -35,7 +39,8 @@ function Sistema() {
         <ClientesActivos
           onAgregar={handleAgregarProductos}
           onPagar={handlePagar}
-          onCrearCliente={handleCrearCliente}  // Pasar la función para crear cliente
+          onCrearCliente={handleCrearCliente}
+          onVerMesasPagadasHoy= {verListaMesasPagadasHoy}  // Pasar la función para crear cliente
           />
       )}
       {componenteActual === 'agregar-productos' && (
@@ -53,6 +58,10 @@ function Sistema() {
        {componenteActual === 'crear-cliente' && (
         <CrearCliente volverClientesActivos={volverClientesActivos} />
       )}
+      {componenteActual === 'mesas-pagadas-hoy' && (
+        <ListaMesasPagadasHoy volverClientesActivos={volverClientesActivos} />
+      )}
+
     </div>
   );
 }

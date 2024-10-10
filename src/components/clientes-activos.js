@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ClientesActivos = ({ onAgregar, onPagar, onCrearCliente }) => { 
+const ClientesActivos = ({ onAgregar, onPagar, onCrearCliente, onVerMesasPagadasHoy }) => { 
     const [mesas, setMesas] = useState([]);
     const [error, setError] = useState(null);
 
@@ -45,6 +45,7 @@ const ClientesActivos = ({ onAgregar, onPagar, onCrearCliente }) => {
                 ))}
               
             </ul>
+            <button onClick={() => onVerMesasPagadasHoy()}>Ver mesas pagadas hoy</button>
         </div>
     );
 };
