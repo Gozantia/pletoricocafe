@@ -38,7 +38,7 @@ function TablaProductos({ productos, setProductos }) {
     };
 
     return ( <>
-      {productos.length > 0 ? <table>
+      {productos.length > 0 ? <table className='products-table'>
             <thead>
                 <tr>
                     <th>Nombre</th>

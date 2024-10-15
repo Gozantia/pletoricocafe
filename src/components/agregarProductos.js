@@ -62,8 +62,8 @@ function AgregarProductos({ mesa, volverClientesActivos }) {
 
     return (
         <div>
-            <h2>Agregar Productos para {mesa.Nombre}</h2>
-            <button onClick={volverClientesActivos}>Volver a Clientes Activos</button>
+            <h2> {mesa.Nombre}</h2>
+            <button onClick={volverClientesActivos}>Volver</button>
 
             {/* Componente SeleccionarProducto */}
             <SeleccionarProducto onSeleccionar={(producto) => {

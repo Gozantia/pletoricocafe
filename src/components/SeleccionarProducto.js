@@ -38,7 +38,7 @@ const SeleccionarProducto = ({ onSeleccionar }) => {
 
   return (
     <div className="seleccionar-producto-container">
-      <h3>Seleccionar Producto por Categoría</h3>
+      <h3>Agrega productos</h3>
 
       {/* Pestañas de categorías */}
       <div className="categorias-tabs">
