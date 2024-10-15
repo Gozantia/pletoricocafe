@@ -76,7 +76,8 @@ function Pagar({mesa, volverClientesActivos}){
 
             <TablaProductos 
                 productos={productosMesa} 
-                disableButtons={true} // Prop para deshabilitar botones
+                setProductos={setProductosMesa} 
+                calcularTotalAcumulado={calcularTotalAcumulado} 
             />
 
             <label>Medio de Pago:</label>

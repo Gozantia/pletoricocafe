@@ -7,6 +7,7 @@ function AgregarProductos({ mesa, volverClientesActivos }) {
     const [productosMesa, setProductosMesa] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    
 
     // Consultar la información de los productos de la mesa seleccionada
     useEffect(() => {
