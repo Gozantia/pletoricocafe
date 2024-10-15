@@ -35,12 +35,8 @@ const ClientesActivos = ({ onAgregar, onPagar, onCrearCliente, onVerMesasPagadas
                 <h3>+ Nuevo cliente</h3>
                 </li>
                 {mesas.map((mesa) => (
-                    <li key={mesa.id}>
+                    <li onClick={() => onAgregar(mesa)} key={mesa.id}>
                         <h3>{mesa.Nombre} </h3>
-                        <div className='acciones'>
-                            <div onClick={() => onAgregar(mesa)}>+ Agregar</div>
-                            <div onClick={() => onPagar(mesa)}>$ Pagar</div>
-                        </div>
                     </li>
                 ))}
               

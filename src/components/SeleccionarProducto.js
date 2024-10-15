@@ -47,6 +47,7 @@ const SeleccionarProducto = ({ onSeleccionar }) => {
             key={categoria}
             className={`tab-button ${categoria === categoriaSeleccionada ? 'active' : ''}`}
             onClick={() => setCategoriaSeleccionada(categoria)}
+            type="button" 
           >
             {categoria}
           </button>
