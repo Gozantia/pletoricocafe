@@ -22,7 +22,7 @@
   font-weight: 800;
   src: url('./fonts/afacad_flux/afacad-flux-v1-latin-800.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
-body, button {
+body, * {
   font-family: 'Afacad Flux';
 }
 
@@ -94,4 +94,23 @@ th {
   border: 1px solid;
   font-weight: 800;
   font-size: 12px;
+}
+.nombres_sugerencias {
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  max-height: 54px;
+  overflow-x: hidden;
+}
+.nombres_sugerencias li {
+  padding: 5px 5px;
+  background-color: #d166d1;
+  min-width: 50px;
+  text-align: center;
+  border-radius: 20px;
+}
+.input_crear_cliente input {
+  border-radius: 20px;
+  padding: 3px 10px;
 }

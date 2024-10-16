@@ -12,7 +12,6 @@ const Login = ({ onLogin }) => {
     const storedUser = process.env.REACT_APP_USER;
     const storedPassword = process.env.REACT_APP_PASSWORD;
     
-    console.log(storedUser)
     if (username === storedUser && password === storedPassword) {
       onLogin();
     } else {
