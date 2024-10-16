@@ -4,7 +4,7 @@ import SeleccionarProducto from './SeleccionarProducto';
 import TablaProductos from './tablaProductos'; // Importamos el nuevo componente TablaProductos
 import sugerenciasNombres from '../sugerencias_nombres_mesas.json'; // Importamos el archivo JSON de sugerencias
 
-function CrearCliente({ volverClientesActivos }) {
+function CrearCliente({ volverClientesActivos, onVerMesasPagadasHoy }) {
     const [loading, setLoading] = useState(false);
     const [nombre, setNombre] = useState(' '); // Nombre por defecto "N.N"
     const [error, setError] = useState(null); // Manejamos errores
@@ -45,7 +45,7 @@ function CrearCliente({ volverClientesActivos }) {
 
             // Hacer la solicitud POST a la API
             const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
-            console.log('Nueva mesa creada:', response.data);
+            
 
             // Volver a la lista de clientes activos
             volverClientesActivos();
@@ -127,8 +127,8 @@ function CrearCliente({ volverClientesActivos }) {
         try {
             setLoading(true);
             await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
-            alert('Pago realizado con éxito');
-            volverClientesActivos(); // Volver a la vista de clientes activos
+            
+            onVerMesasPagadasHoy(); // Volver a la vista de mesas pagadas
         } catch (err) {
             console.error('Error al realizar el pago:', err);
             setError('No se pudo realizar el pago');

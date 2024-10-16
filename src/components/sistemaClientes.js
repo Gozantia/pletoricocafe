@@ -56,7 +56,9 @@ function Sistema() {
        />
        )}
        {componenteActual === 'crear-cliente' && (
-        <CrearCliente volverClientesActivos={volverClientesActivos} />
+        <CrearCliente
+        volverClientesActivos={volverClientesActivos}
+        onVerMesasPagadasHoy= {verListaMesasPagadasHoy}   />
       )}
       {componenteActual === 'mesas-pagadas-hoy' && (
         <ListaMesasPagadasHoy volverClientesActivos={volverClientesActivos} />
