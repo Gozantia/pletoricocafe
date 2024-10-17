@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import ClientesActivos from './clientes-activos';
 import AgregarProductos from './agregarProductos';
-import Pagar from './pagar';
 import CrearCliente from './crearCliente';
 import ListaMesasPagadasHoy from './listaMesasPagadasHoy';
 function Sistema() {
@@ -49,12 +48,6 @@ function Sistema() {
         volverClientesActivos={volverClientesActivos}
         />
       )}
-      {componenteActual === 'pagar' && (
-        <Pagar
-      mesa={clienteSeleccionado}
-      volverClientesActivos={volverClientesActivos}
-       />
-       )}
        {componenteActual === 'crear-cliente' && (
         <CrearCliente
         volverClientesActivos={volverClientesActivos}
