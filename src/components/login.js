@@ -1,44 +1,55 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+//import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 
-const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+const Entrar = ({ onLogin }) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    //const navigate = useNavigate(); // Inicializar useNavigate
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Acceder a las variables de entorno para comparar las credenciales
-    const storedUser = process.env.REACT_APP_USER;
-    const storedPassword = process.env.REACT_APP_PASSWORD;
-    
-    if (username === storedUser && password === storedPassword) {
-      onLogin();
-    } else {
-      setError('Usuario o contraseña incorrectos');
-    }
-  };
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/users/login', {
+                username,
+                password
+            });
+            const data = JSON.parse(response.data.body); // Parsear el body del JSON
+            if (data.message === "Inicio de sesión exitoso") {
+              const { id, role, username } = data;
+              onLogin(role, id, username); // Solo llamar a onLogin si el login es exitoso
+              //navigate(`/mi-perfil/${data.id}`); // Redirigir a la ruta de MiPerfil
+          } else {
+              setError("Inicio de sesión fallido. Credenciales incorrectas.");
+          }
+          
+        } catch (err) {
+            console.error("Error during login:", err);
+            setError("Inicio de sesión fallido. Verifica tus credenciales.");
+        }
+    };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Usuario"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit">Iniciar Sesión</button>
-      {error && <p>{error}</p>}
-    </form>
-  );
+    return (
+        <div className='login-container'>
+            <h2>Iniciar Sesión</h2>
+            <div>
+            <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+            />
+            <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+            />
+            <button onClick={handleLogin} tabIndex="0">Iniciar Sesión</button>
+            {error && <p>{error}</p>}
+            </div>
+        </div>
+    );
 };
 
-export default Login;
+export default Entrar;

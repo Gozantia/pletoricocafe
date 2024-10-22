@@ -2,24 +2,29 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SeleccionarProducto from './SeleccionarProducto';
 import TablaProductos from './tablaProductos';
+import { useNavigate, useParams } from 'react-router-dom';
 
-function AgregarProductos({ mesa, volverClientesActivos }) {
+function AgregarProductos({ }) {
+    const { id } = useParams(); // Obtener el id de la URL
+    const navigate = useNavigate();
     const [productosMesa, setProductosMesa] = useState([]);
+    const [mesaInfo, setMesaInfo] = useState(null); // Estado para guardar la información de la mesa
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [pagarVisible, setPagarVisible] = useState(false);
     const [medioPago, setMedioPago] = useState('');
     const [pagoCon, setPagoCon] = useState(0);
 
-    // Consultar la información de los productos de la mesa seleccionada
+    // Consultar la información de la mesa y sus productos
     useEffect(() => {
         const fetchProductos = async () => {
             setLoading(true);
             setError(null);
 
             try {
-                const response = await axios.get(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${mesa.id}`);
+                const response = await axios.get(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${id}`);
                 setProductosMesa(response.data.Productos); // Asumimos que la respuesta contiene una propiedad 'Productos'
+                setMesaInfo(response.data); // Guardar toda la información de la mesa
             } catch (err) {
                 console.error('Error al obtener los productos de la mesa', err);
                 setError('No se pudieron cargar los productos');
@@ -29,9 +34,9 @@ function AgregarProductos({ mesa, volverClientesActivos }) {
         };
 
         fetchProductos();
-    }, [mesa.id]);
+    }, [id]);
 
-    // Función para calcular el total acumulado (usada en TablaProductos)
+    // Función para calcular el total acumulado
     const calcularTotalAcumulado = () => {
         return productosMesa.reduce((total, producto) => {
             return total + (producto.cantidad * producto.precio);
@@ -45,18 +50,17 @@ function AgregarProductos({ mesa, volverClientesActivos }) {
 
         try {
             const mesaActualizada = {
-                ...mesa,
+                ...mesaInfo, // Usar mesaInfo en lugar de mesa
                 Productos: productosMesa // Guardar los productos actualizados
             };
 
-            // Hacer la solicitud PUT para actualizar los productos
-            const response = await axios.put(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${mesa.id}`, mesaActualizada);
+            const response = await axios.put(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${mesaInfo.id}`, mesaActualizada);
 
-            console.log('Mesa actualizada con éxito:', response.data);
             alert('Mesa actualizada con éxito');
+            navigate('/sistema');
         } catch (err) {
             console.error('Error al actualizar la mesa', err);
-            setError('No se pudo actualizar la mesa'); // Mostrar el error
+            setError('No se pudo actualizar la mesa');
         } finally {
             setLoading(false);
         }
@@ -69,8 +73,8 @@ function AgregarProductos({ mesa, volverClientesActivos }) {
 
     // Manejar el pago cuando se selecciona "Listo"
     const manejarPago = async () => {
-        const totalAcumulado = calcularTotalAcumulado(); // Calcular el total aquí
-        const cambio = pagoCon > 0 ? pagoCon - totalAcumulado : 0; // Calcular cambio aquí
+        const totalAcumulado = calcularTotalAcumulado();
+        const cambio = pagoCon > 0 ? pagoCon - totalAcumulado : 0;
 
         if (medioPago === 'efectivo' && cambio < 0) {
             alert('El monto ingresado no cubre el total.');
@@ -78,7 +82,7 @@ function AgregarProductos({ mesa, volverClientesActivos }) {
         }
 
         const mesaActualizada = {
-            ...mesa,
+            ...mesaInfo,
             Estado: "Pagado",
             Productos: productosMesa,
             TotalVenta: totalAcumulado,
@@ -87,9 +91,8 @@ function AgregarProductos({ mesa, volverClientesActivos }) {
 
         try {
             setLoading(true);
-            const response = await axios.put(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${mesa.id}`, mesaActualizada);
-            console.log('Mesa pagada con éxito:', response.data);
-            alert('Pago realizado con éxito');
+            await axios.put(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${mesaInfo.id}`, mesaActualizada);
+            navigate('/sistema/mesas-pagadas');
         } catch (err) {
             console.error('Error al actualizar la mesa', err);
             setError('No se pudo realizar el pago');
@@ -100,88 +103,91 @@ function AgregarProductos({ mesa, volverClientesActivos }) {
 
     return (
         <div>
-            <h2> {mesa.Nombre}</h2>
-            <button onClick={volverClientesActivos}>Volver</button>
-
-            {/* Componente SeleccionarProducto */}
-            <SeleccionarProducto onSeleccionar={(producto) => {
-                setProductosMesa((prevProductos) => [...prevProductos, { ...producto, cantidad: 1 }]);
-            }} />
-
             {loading && <p>Cargando productos...</p>}
             {error && <p>{error}</p>}
+            
+            {mesaInfo ? (
+                <>
+                    <h2>{mesaInfo.Nombre}</h2>
 
-            {/* Tabla de productos con el componente reutilizable */}
-            <TablaProductos 
-                productos={productosMesa} 
-                setProductos={setProductosMesa} 
-                calcularTotalAcumulado={calcularTotalAcumulado} 
-            />
+                    {/* Componente SeleccionarProducto */}
+                    <SeleccionarProducto onSeleccionar={(producto) => {
+                        setProductosMesa((prevProductos) => [...prevProductos, { ...producto, cantidad: 1 }]);
+                    }} />
 
-            {/* Botón para actualizar la mesa */}
-            <button onClick={handleActualizar} disabled={loading}>Actualizar</button>
+                    {/* Tabla de productos con el componente reutilizable */}
+                    <TablaProductos 
+                        productos={productosMesa} 
+                        setProductos={setProductosMesa} 
+                        calcularTotalAcumulado={calcularTotalAcumulado} 
+                    />
 
-            {/* Botón para pagar */}
-            <button onClick={handlePagarClick} disabled={loading}>Pagar</button>
+                    {/* Botón para actualizar la mesa */}
+                    <button onClick={handleActualizar} disabled={loading}>Actualizar</button>
 
-            {/* Sección de pago visible solo cuando se selecciona pagar */}
-            {pagarVisible && (
-                <div>
-                    <h3>Pagar</h3>
+                    {/* Botón para pagar */}
+                    <button onClick={handlePagarClick} disabled={loading}>Pagar</button>
 
-                    {/* Opciones de pago */}
-                    <label>
-                        <input
-                            type="radio"
-                            value="efectivo"
-                            checked={medioPago === 'efectivo'}
-                            onChange={(e) => setMedioPago(e.target.value)}
-                        />
-                        Efectivo
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            value="transferencia"
-                            checked={medioPago === 'transferencia'}
-                            onChange={(e) => setMedioPago(e.target.value)}
-                        />
-                        Transferencia
-                    </label>
-
-                    {/* Mostrar campo "pagoCon" si el medio de pago es efectivo */}
-                    {medioPago === 'efectivo' && (
+                    {pagarVisible && (
                         <div>
+                            <h3>Pagar</h3>
+
+                            {/* Opciones de pago */}
                             <label>
-                                Pago con:
                                 <input
-                                    type="number"
-                                    value={pagoCon}
-                                    onChange={(e) => setPagoCon(Number(e.target.value))}
+                                    type="radio"
+                                    value="efectivo"
+                                    checked={medioPago === 'efectivo'}
+                                    onChange={(e) => setMedioPago(e.target.value)}
                                 />
+                                Efectivo
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="transferencia"
+                                    checked={medioPago === 'transferencia'}
+                                    onChange={(e) => setMedioPago(e.target.value)}
+                                />
+                                Transferencia
                             </label>
 
-                            {/* Calcular total acumulado aquí */}
-                            <div>Total: ${calcularTotalAcumulado()}</div>
-
-                            {/* Mostrar cambio si el pago cubre el total */}
-                            {pagoCon > 0 && pagoCon >= calcularTotalAcumulado() && (
+                            {/* Mostrar campo "pagoCon" si el medio de pago es efectivo */}
+                            {medioPago === 'efectivo' && (
                                 <div>
-                                    <strong>Cambio: ${(pagoCon - calcularTotalAcumulado()).toFixed(2)}</strong>
+                                    <label>
+                                        Pago con:
+                                        <input
+                                            type="number"
+                                            value={pagoCon}
+                                            onChange={(e) => setPagoCon(Number(e.target.value))}
+                                        />
+                                    </label>
+
+                                    <div>Total: ${calcularTotalAcumulado()}</div>
+
+                                    {/* Mostrar cambio si el pago cubre el total */}
+                                    {pagoCon > 0 && pagoCon >= calcularTotalAcumulado() && (
+                                        <div>
+                                            <strong>Cambio: ${(pagoCon - calcularTotalAcumulado()).toFixed(2)}</strong>
+                                        </div>
+                                    )}
+
+                                    {/* Mostrar mensaje si el pago no cubre el total */}
+                                    {pagoCon > 0 && pagoCon < calcularTotalAcumulado() && (
+                                        <div style={{ color: 'red' }}>
+                                            El monto no cubre el total de la compra.
+                                        </div>
+                                    )}
                                 </div>
                             )}
 
-                            {/* Mostrar mensaje si el pago no cubre el total */}
-                            {pagoCon > 0 && pagoCon < calcularTotalAcumulado() && (
-                                <div style={{ color: 'red' }}>
-                                    El monto no cubre el total de la compra.
-                                </div>
-                            )}
+                            <button onClick={manejarPago} disabled={loading}>Listo</button>
                         </div>
                     )}
-
-                    <button onClick={manejarPago} disabled={loading}>Listo</button>
-                </div>
+                </>
+            ) : (
+                <p>Cargando información de la mesa...</p>
             )}
         </div>
     );

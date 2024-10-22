@@ -3,8 +3,10 @@ import axios from 'axios';
 import SeleccionarProducto from './SeleccionarProducto';
 import TablaProductos from './tablaProductos'; // Importamos el nuevo componente TablaProductos
 import sugerenciasNombres from '../sugerencias_nombres_mesas.json'; // Importamos el archivo JSON de sugerencias
+import { useNavigate } from 'react-router-dom';
 
-function CrearCliente({ volverClientesActivos, onVerMesasPagadasHoy }) {
+function CrearCliente({ onVerMesasPagadasHoy }) {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [nombre, setNombre] = useState(' '); // Nombre por defecto "N.N"
     const [error, setError] = useState(null); // Manejamos errores
@@ -48,7 +50,7 @@ function CrearCliente({ volverClientesActivos, onVerMesasPagadasHoy }) {
             
 
             // Volver a la lista de clientes activos
-            volverClientesActivos();
+            navigate('/sistema');
         } catch (err) {
             console.error('Error al crear mesa', err);
             setError('No se pudo crear la mesa');
@@ -128,7 +130,7 @@ function CrearCliente({ volverClientesActivos, onVerMesasPagadasHoy }) {
             setLoading(true);
             await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
             
-            onVerMesasPagadasHoy(); // Volver a la vista de mesas pagadas
+            navigate('/sistema/mesas-pagadas');
         } catch (err) {
             console.error('Error al realizar el pago:', err);
             setError('No se pudo realizar el pago');
@@ -142,7 +144,6 @@ function CrearCliente({ volverClientesActivos, onVerMesasPagadasHoy }) {
     return (
         <div>
             {/* Botón para volver a la lista de clientes activos */}
-            <button onClick={volverClientesActivos}>Volver a Clientes Activos</button>
 
             <h3>Ring Ring ¡Llegó alguien!</h3>
 

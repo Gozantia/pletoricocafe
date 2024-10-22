@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const ClientesActivos = ({ onAgregar, onCrearCliente, onVerMesasPagadasHoy }) => { 
+const ClientesActivos = ({ onAgregar, onCrearCliente }) => { 
+    const navigate = useNavigate();
     const [mesas, setMesas] = useState([]);
     const [error, setError] = useState(null);
 
@@ -47,16 +49,16 @@ const ClientesActivos = ({ onAgregar, onCrearCliente, onVerMesasPagadasHoy }) =>
             <h1>Clientes activos</h1>
         
             <ul className='clientes-activos'>
-                <li className='nuevo_cliente' onClick={onCrearCliente}>
+                <li className='nuevo_cliente' onClick={() => navigate('/sistema/crear-cliente')}>
                     <h3>+ Nuevo cliente</h3>
                 </li>
                 {mesas.map((mesa) => (
-                    <li onClick={() => onAgregar(mesa)} key={mesa.id}>
-                        <h3>{mesa.Nombre}</h3>
+                    <li onClick={() => navigate(`/sistema/editar-mesa/${mesa.id}`)} key={mesa.id}>
+                    <h3>{mesa.Nombre}</h3>
                     </li>
                 ))}
             </ul>
-            <button onClick={() => onVerMesasPagadasHoy()}>Ver mesas pagadas hoy</button>
+            
         </div>
     );
 };

@@ -22,6 +22,11 @@
   font-weight: 800;
   src: url('./fonts/afacad_flux/afacad-flux-v1-latin-800.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
+
+body {
+  margin:0;
+}
+
 body, * {
   font-family: 'Afacad Flux';
 }
@@ -113,4 +118,121 @@ th {
 .input_crear_cliente input {
   border-radius: 20px;
   padding: 3px 10px;
+}
+header {
+  background: #1a1902;
+  color: #fff;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+header, main { 
+  padding: 15px;
+}
+.logo {
+  width: 130px;
+  height: 37px;
+}
+header, header nav{
+  display: flex;
+ 
+
+}
+header nav{
+  flex: 2;
+  justify-content: space-between;
+}
+header nav a {
+  color: #fff;
+  text-decoration: none;
+}
+header nav a:hover {
+  text-decoration: underline;
+}
+header nav ul{
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; 
+  margin: 0;
+  padding: 0;
+} 
+
+.userNav ul {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: #1a1902;
+  padding: 10px; /* Ocultar el menú hijo por defecto */
+}
+
+.userNav:focus-within ul {
+  display: block; /* Mostrar el menú cuando .userNavName tiene foco */
+}
+
+
+.globalNav {
+  width: 15px;
+    height: 22px;
+    transform: rotate(180deg);
+    fill: #fff;
+}
+
+.userNavName {
+  display: flex;
+  cursor: pointer;
+}
+.userNavName h4 {
+  padding: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Para centrar verticalmente en toda la página */
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+}
+
+.login-container div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espacio entre los elementos del formulario */
+  width: 100%; /* El formulario tomará el 100% del ancho de su contenedor */
+  max-width: 400px; /* Para limitar el ancho máximo */
+}
+
+.login-container div input {
+  width: 100%; /* Input tomará todo el ancho del formulario */
+  padding: 10px;
+  border: 2px solid #000;
+  border-radius: 5px; /* Un pequeño borde redondeado para estética */
+  box-sizing: border-box; /* Para asegurar que el padding no afecte el ancho total */
+}
+
+.login-container div button {
+  padding: 10px;
+  width: 100%; /* Botón toma el ancho completo del formulario */
+  background-color: #ff5e00; /* Color de fondo del botón */
+  color: #fff; /* Color del texto en el botón */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Efecto de transición en hover */
+}
+
+.login-container div button:hover {
+  background-color: #b94806; /* Color del botón al hacer hover */
+}
+
+.login-container p {
+  color: red; /* Color del texto de error */
+  font-size: 14px;
 }

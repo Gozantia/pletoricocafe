@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function ListaMesasPagadasHoy({volverClientesActivos}) {
+function ListaMesasPagadasHoy() {
     const [mesasPagadas, setMesasPagadas] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -59,7 +59,7 @@ function ListaMesasPagadasHoy({volverClientesActivos}) {
     return (
         <div>
             <h2>Mesas Pagadas Hoy</h2>
-            <button onClick={volverClientesActivos}>Volver a Clientes Activos</button>
+           
             <table>
                 <thead>
                     <tr>
