@@ -36,6 +36,8 @@ const Header = ({ isAuthenticated, userId, role, setIsAuthenticated, setRole, se
            
             {userId && <li><Link to={`/mi-perfil/${userId}`}>Mi Perfil</Link></li>}
             {role === 'manager' && <li><Link to="/crea-usuario">Crear Usuario</Link></li>}
+            
+            {role === 'manager' && <li><Link to="/sistema/ventas-mes">Ventas mes actual</Link></li>}
             <li><button onClick={handleLogout}>Salir</button></li>
             </ul>
           </ul>

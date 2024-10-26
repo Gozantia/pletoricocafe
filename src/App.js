@@ -10,6 +10,7 @@ import Header from './components/header'; // Importa el nuevo componente
 import ListaMesasPagadasHoy from './components/listaMesasPagadasHoy';
 import CrearCliente from './components/crearCliente';
 import AgregarProductos from './components/agregarProductos';
+import VentasMes from './components/ventas-mes';
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('isAuthenticated') === 'true' || false;
@@ -77,6 +78,10 @@ const App = () => {
         <Route
           path="/crea-usuario"
           element={isAuthenticated && role === 'manager' ? <CrearUsuario /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/sistema/ventas-mes"
+          element={isAuthenticated ? <VentasMes /> : <Navigate to="/" />}
         />
         <Route path="/mi-perfil/:id" element={<MiPerfil />} />
       </Routes>

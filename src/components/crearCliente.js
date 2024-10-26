@@ -188,68 +188,68 @@ function CrearCliente({ onVerMesasPagadasHoy }) {
                     setProductos={setProductosSeleccionados}
                     calcularTotalAcumulado={calcularTotalAcumulado} 
                 />
-
-                <button disabled={loading} onClick={handleCreateMesa}>
-                    {loading ? 'Creando...' : 'Guardar cliente'}
-                </button>
-                <button onClick={handleGuardarYPagar} disabled={loading}>Guardar y Pagar</button>
-                {/* Mostrar sección de pago solo cuando se selecciona "Guardar y Pagar" */}
-            {pagarVisible && (
-                <div>
-                    <h3>Pagar</h3>
-
-                    <label>
-                        <input
-                            type="radio"
-                            value="efectivo"
-                            checked={medioPago === 'efectivo'}
-                            onChange={(e) => setMedioPago(e.target.value)}
-                        />
-                        Efectivo
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            value="transferencia"
-                            checked={medioPago === 'transferencia'}
-                            onChange={(e) => setMedioPago(e.target.value)}
-                        />
-                        Transferencia
-                    </label>
-
-                    {/* Mostrar campo "Pago con" si el medio de pago es efectivo */}
-                    {medioPago === 'efectivo' && (
+                 <div className='actions'>
+                    <button disabled={loading} onClick={handleCreateMesa}>
+                        {loading ? 'Creando...' : 'Guardar cliente'}
+                    </button>
+                    <button onClick={handleGuardarYPagar} disabled={loading}>Guardar y Pagar</button>
+                    {/* Mostrar sección de pago solo cuando se selecciona "Guardar y Pagar" */}
+                        {pagarVisible && (
                         <div>
+                            <h3>Pagar</h3>
+
                             <label>
-                                Pago con:
                                 <input
-                                    type="number"
-                                    value={pagoCon}
-                                    onChange={(e) => setPagoCon(Number(e.target.value))}
+                                    type="radio"
+                                    value="efectivo"
+                                    checked={medioPago === 'efectivo'}
+                                    onChange={(e) => setMedioPago(e.target.value)}
                                 />
+                                Efectivo
                             </label>
-                            <div>Total: ${calcularTotalAcumulado()}</div>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="transferencia"
+                                    checked={medioPago === 'transferencia'}
+                                    onChange={(e) => setMedioPago(e.target.value)}
+                                />
+                                Transferencia
+                            </label>
 
-                            {/* Mostrar cambio si el pago cubre el total */}
-                            {pagoCon > 0 && pagoCon >= calcularTotalAcumulado() && (
+                            {/* Mostrar campo "Pago con" si el medio de pago es efectivo */}
+                            {medioPago === 'efectivo' && (
                                 <div>
-                                    <strong>Cambio: ${(pagoCon - calcularTotalAcumulado()).toFixed(2)}</strong>
+                                    <label>
+                                        Pago con:
+                                        <input
+                                            type="number"
+                                            value={pagoCon}
+                                            onChange={(e) => setPagoCon(Number(e.target.value))}
+                                        />
+                                    </label>
+                                    <div>Total: ${calcularTotalAcumulado()}</div>
+
+                                    {/* Mostrar cambio si el pago cubre el total */}
+                                    {pagoCon > 0 && pagoCon >= calcularTotalAcumulado() && (
+                                        <div>
+                                            <strong>Cambio: ${(pagoCon - calcularTotalAcumulado()).toFixed(2)}</strong>
+                                        </div>
+                                    )}
+
+                                    {/* Mostrar mensaje si el pago no cubre el total */}
+                                    {pagoCon > 0 && pagoCon < calcularTotalAcumulado() && (
+                                        <div style={{ color: 'red' }}>
+                                            El monto no cubre el total de la compra.
+                                        </div>
+                                    )}
                                 </div>
                             )}
 
-                            {/* Mostrar mensaje si el pago no cubre el total */}
-                            {pagoCon > 0 && pagoCon < calcularTotalAcumulado() && (
-                                <div style={{ color: 'red' }}>
-                                    El monto no cubre el total de la compra.
-                                </div>
-                            )}
+                            <button onClick={manejarPago} disabled={loading}>Listo</button>
                         </div>
-                    )}
-
-                    <button onClick={manejarPago} disabled={loading}>Listo</button>
-                </div>
-            )}        
-         
+                    )}        
+             </div>
         </div>
     );
 }

@@ -194,7 +194,7 @@ header nav ul{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Para centrar verticalmente en toda la página */
+  min-height: 80vh; /* Para centrar verticalmente en toda la página */
 }
 
 .login-container h2 {
@@ -209,7 +209,7 @@ header nav ul{
   max-width: 400px; /* Para limitar el ancho máximo */
 }
 
-.login-container div input {
+.login-container div input, input {
   width: 100%; /* Input tomará todo el ancho del formulario */
   padding: 10px;
   border: 2px solid #000;
@@ -217,7 +217,7 @@ header nav ul{
   box-sizing: border-box; /* Para asegurar que el padding no afecte el ancho total */
 }
 
-.login-container div button {
+.login-container div button, button {
   padding: 10px;
   width: 100%; /* Botón toma el ancho completo del formulario */
   background-color: #ff5e00; /* Color de fondo del botón */
@@ -228,11 +228,32 @@ header nav ul{
   transition: background-color 0.3s ease; /* Efecto de transición en hover */
 }
 
-.login-container div button:hover {
+.login-container div button:hover, button:hover {
   background-color: #b94806; /* Color del botón al hacer hover */
 }
 
 .login-container p {
   color: red; /* Color del texto de error */
   font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  margin: 15px;
+  flex-wrap: wrap;
+}
+button, input {
+  width: auto;
+}
+.actions button {
+  flex-grow: 1;
+  margin: 0 5px;
+}
+
+.actions div{ 
+  flex-grow: 2;
+}
+.actions div {
+  flex-grow: 2;
 }

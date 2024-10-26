@@ -123,6 +123,7 @@ function AgregarProductos({ }) {
                     />
 
                     {/* Botón para actualizar la mesa */}
+                   <div className='actions'>
                     <button onClick={handleActualizar} disabled={loading}>Actualizar</button>
 
                     {/* Botón para pagar */}
@@ -184,7 +185,9 @@ function AgregarProductos({ }) {
 
                             <button onClick={manejarPago} disabled={loading}>Listo</button>
                         </div>
+                
                     )}
+                 </div>
                 </>
             ) : (
                 <p>Cargando información de la mesa...</p>
