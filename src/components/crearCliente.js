@@ -4,8 +4,11 @@ import SeleccionarProducto from './SeleccionarProducto';
 import TablaProductos from './tablaProductos'; // Importamos el nuevo componente TablaProductos
 import sugerenciasNombres from '../sugerencias_nombres_mesas.json'; // Importamos el archivo JSON de sugerencias
 import { useNavigate } from 'react-router-dom';
+import { useDiaTrabajo } from '../DiaTrabajoContext'; // Asegúrate de que la ruta sea correcta
 
-function CrearCliente({ onVerMesasPagadasHoy }) {
+
+
+function CrearCliente() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [nombre, setNombre] = useState(' '); // Nombre por defecto "N.N"
@@ -18,12 +21,15 @@ function CrearCliente({ onVerMesasPagadasHoy }) {
     const [pagoCon, setPagoCon] = useState(0);
 
 
+   
+
+
     // Función para manejar la creación de una nueva mesa
     const handleCreateMesa = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
-
+        //setDiaTrabajo(null);
          // Validación: No permitir guardar si no hay productos seleccionados
          if (productosSeleccionados.length === 0) {
             setError('Debe seleccionar al menos un producto antes de guardar.');
@@ -38,19 +44,46 @@ function CrearCliente({ onVerMesasPagadasHoy }) {
         }
 
         try {
+
+                        // Verificar si hay un día de trabajo activo
+                        const diaResponse = await axios.get('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo');
+                        let diaId;
+            
+                        // Si no hay un día activo, crear uno
+                        if (diaResponse.status === 404) {
+                            const nuevoDiaResponse = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo');
+                            diaId = nuevoDiaResponse.data.data.dia_id; // ID del nuevo día de trabajo
+                            console.log("se creó un nuevo día",diaId)
+                        } else {
+                            diaId = diaResponse.data.data.dia_id;
+                            console.log("entró en este día",diaId) // ID del día de trabajo activo
+                        }
+
             // Crear el objeto para la nueva mesa
             const newMesa = {
                 Nombre: nombre,
                 Estado: 'activo',
-                Productos: productosSeleccionados // Enviamos los productos seleccionados
+                Productos: productosSeleccionados, // Enviamos los productos seleccionados
+                DiaTrabajoId : diaId 
             };
+
+
+            
 
             // Hacer la solicitud POST a la API
             const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
-            
+            const newMesaId = response.data.cliente_id;
+            console.log(newMesaId)
 
+            // Actualizar el día de trabajo con el ID de la nueva mesa
+           const addVentatoDiaResponse = await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', {
+                dia_id: diaId,   // El ID del día de trabajo actual
+                mesa_id: newMesaId,   // El ID de la mesa recién creada
+              
+            });
+            console.log("respuesta del evento put", addVentatoDiaResponse)
             // Volver a la lista de clientes activos
-            navigate('/sistema');
+            navigate(`/sistema/`);
         } catch (err) {
             console.error('Error al crear mesa', err);
             setError('No se pudo crear la mesa');
@@ -87,7 +120,7 @@ function CrearCliente({ onVerMesasPagadasHoy }) {
      const calcularTotalAcumulado = () => {
         return productosSeleccionados.reduce((total, producto) => {
             return total + (producto.cantidad * producto.precio);
-        }, 0).toFixed(2);
+        }, 0).toFixed(0);
     };
 
     // Función para manejar "Guardar y Pagar"
@@ -110,7 +143,13 @@ function CrearCliente({ onVerMesasPagadasHoy }) {
 
     // Manejar el pago cuando se selecciona "Listo"
     const manejarPago = async () => {
-        const totalAcumulado = calcularTotalAcumulado(); // Calcular el total
+        // Verificar si el medio de pago ha sido seleccionado
+            if (!medioPago) {
+                setError('Por favor, selecciona un medio de pago (Efectivo o Transferencia).');
+                return;
+            }
+
+        const totalAcumulado =  Number(calcularTotalAcumulado()).toFixed(0); // Calcular el total
         const cambio = pagoCon > 0 ? pagoCon - totalAcumulado : 0;
 
         if (medioPago === 'efectivo' && cambio < 0) {
@@ -118,17 +157,43 @@ function CrearCliente({ onVerMesasPagadasHoy }) {
             return;
         }
 
-        const newMesa = {
-            Nombre: nombre,
-            Estado: 'Pagado',
-            Productos: productosSeleccionados,
-            TotalVenta: totalAcumulado,
-            MedioPago: medioPago,
-        };
-
+        
         try {
             setLoading(true);
-            await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
+            // Verificar si hay un día de trabajo activo
+            const diaResponse = await axios.get('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo');
+            let diaId;
+
+            // Si no hay un día activo, crear uno
+            if (diaResponse.status === 404) {
+                const nuevoDiaResponse = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo');
+                diaId = nuevoDiaResponse.data.data.dia_id; // ID del nuevo día de trabajo
+                console.log("se creó un nuevo día",diaId)
+            } else {
+                diaId = diaResponse.data.data.dia_id;
+                console.log("entró en este día",diaId) // ID del día de trabajo activo
+            }
+
+            const newMesa = {
+                Nombre: nombre,
+                Estado: 'Pagado',
+                Productos: productosSeleccionados,
+                TotalVenta: totalAcumulado,
+                MedioPago: medioPago,
+                DiaTrabajoId : diaId 
+            };
+     
+            // Hacer la solicitud POST a la API
+            const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
+            const newMesaId = response.data.cliente_id;
+            console.log(newMesaId)
+
+            // Actualizar el día de trabajo con el ID de la nueva mesa
+           const addVentatoDiaResponse = await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', {
+                dia_id: diaId,   // El ID del día de trabajo actual
+                mesa_id: newMesaId,   // El ID de la mesa recién creada
+              
+            });
             
             navigate('/sistema/mesas-pagadas');
         } catch (err) {
@@ -196,7 +261,7 @@ function CrearCliente({ onVerMesasPagadasHoy }) {
                     {/* Mostrar sección de pago solo cuando se selecciona "Guardar y Pagar" */}
                         {pagarVisible && (
                         <div>
-                            <h3>Pagar</h3>
+                             <h4 className='valor_total'>Total: ${calcularTotalAcumulado()}</h4>
 
                             <label>
                                 <input
@@ -220,15 +285,16 @@ function CrearCliente({ onVerMesasPagadasHoy }) {
                             {/* Mostrar campo "Pago con" si el medio de pago es efectivo */}
                             {medioPago === 'efectivo' && (
                                 <div>
-                                    <label>
-                                        Pago con:
+                                        
+                                    <label> 
+                                    (opcional)  Devuelta de:
                                         <input
                                             type="number"
                                             value={pagoCon}
                                             onChange={(e) => setPagoCon(Number(e.target.value))}
                                         />
                                     </label>
-                                    <div>Total: ${calcularTotalAcumulado()}</div>
+                                    
 
                                     {/* Mostrar cambio si el pago cubre el total */}
                                     {pagoCon > 0 && pagoCon >= calcularTotalAcumulado() && (

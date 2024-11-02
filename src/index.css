@@ -246,14 +246,20 @@ header nav ul{
 button, input {
   width: auto;
 }
-.actions button {
-  flex-grow: 1;
+.actions button, .actions > div {
   margin: 0 5px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: calc(50% - 20px);
 }
-
-.actions div{ 
-  flex-grow: 2;
+.actions > div {
+  flex-basis: calc(33% - 20px);
 }
-.actions div {
-  flex-grow: 2;
+.actions > div > div{
+ border: 1px solid blue;
+}
+.actions .valor_total {
+  font-weight: bold;
+  font-size: 1.3rem;
+  letter-spacing: 2px;
 }

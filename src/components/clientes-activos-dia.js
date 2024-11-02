@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
 
-const ClientesActivos = () => { 
+const ClientesActivosDia = () => { 
     const { idDelDiaDeTrabajo } = useDiaTrabajo();
     const navigate = useNavigate();
     const [mesas, setMesas] = useState([]);
@@ -11,29 +11,29 @@ const ClientesActivos = () => {
 
     // Función para cargar las mesas existentes
     const fetchMesas = async () => {
-        if (!idDelDiaDeTrabajo) return; // Evitar que se ejecute si idDelDiaDeTrabajo es null
         try {
             const response = await axios.get(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo/${idDelDiaDeTrabajo}`);
             setMesas(response.data.clientes_activos);
         } catch (err) {
             console.error('Error al obtener mesas', err);
-            setError('Hubo un problema al obtener las mesas.');
+            setError('Buenos días, tardes ya');
         }
     };
 
-    // Cargar las mesas cuando el componente se monta o cuando cambia idDelDiaDeTrabajo
+    // Cargar las mesas cuando el componente se monta
     useEffect(() => {
         fetchMesas();
-    }, [idDelDiaDeTrabajo]); // Ahora depende de idDelDiaDeTrabajo
+    }, []);
 
     const actualizarDatos = useCallback(() => {
         fetchMesas(); // Llamar a la función fetchMesas para actualizar los datos
-    }, [idDelDiaDeTrabajo]); // Asegúrate de que esta función depende de idDelDiaDeTrabajo
+    }, []); // Dependencias de useCallback
 
     // Manejar el cambio de visibilidad
     useEffect(() => {
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
+                // Actualizar los datos cuando la pestaña esté activa
                 actualizarDatos();
             }
         };
@@ -43,8 +43,8 @@ const ClientesActivos = () => {
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
-    }, [actualizarDatos]);
-
+    }, [actualizarDatos]); // Incluir actualizarDatos como dependencia
+   
     return (
         <div>
             {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -56,7 +56,7 @@ const ClientesActivos = () => {
                 </li>
                 {mesas.map((mesa) => (
                     <li onClick={() => navigate(`/sistema/editar-mesa/${mesa.id}`)} key={mesa.id}>
-                        <h3>{mesa.Nombre}</h3>
+                    <h3>{mesa.Nombre}</h3>
                     </li>
                 ))}
             </ul>
@@ -65,4 +65,4 @@ const ClientesActivos = () => {
     );
 };
 
-export default ClientesActivos;
+export default ClientesActivosDia;

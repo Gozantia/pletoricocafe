@@ -11,7 +11,12 @@ import ListaMesasPagadasHoy from './components/listaMesasPagadasHoy';
 import CrearCliente from './components/crearCliente';
 import AgregarProductos from './components/agregarProductos';
 import VentasMes from './components/ventas-mes';
+import ClientesActivosDia from './components/clientes-activos-dia';
+import ClientesPagadosDia from './components/clientes-pagados-dia';
+import ClientesActivos from './components/clientes-activos';
+
 const App = () => {
+
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('isAuthenticated') === 'true' || false;
   });
@@ -60,7 +65,7 @@ const App = () => {
         />
         <Route
           path="/sistema"
-          element={isAuthenticated ? <Sistema /> : <Navigate to="/" />}
+          element={isAuthenticated ? <ClientesActivos /> : <Navigate to="/" />}
         />
         <Route
           path="/sistema/crear-cliente"
@@ -68,11 +73,16 @@ const App = () => {
         />
         <Route
           path="/sistema/mesas-pagadas"
-          element={isAuthenticated ? <ListaMesasPagadasHoy /> : <Navigate to="/" />}
+          element={isAuthenticated ? <ClientesPagadosDia /> : <Navigate to="/" />}
         />
         <Route
           path="/sistema/editar-mesa/:id"
           element={isAuthenticated ? <AgregarProductos /> : <Navigate to="/" />}
+        />
+        
+        <Route
+          path="/sistema/clientes-activos/:id"
+          element={isAuthenticated ? <ClientesActivosDia /> : <Navigate to="/" />}
         />
 
         <Route

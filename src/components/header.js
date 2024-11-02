@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../images/pletoricologo-white.png';
+import { useDiaTrabajo } from '../DiaTrabajoContext';
 
-const Header = ({ isAuthenticated, userId, role, setIsAuthenticated, setRole, setUserId, userUsername }) => {
+const Header = ({ isAuthenticated, userId, role, setIsAuthenticated, setRole, setUserId, userUsername  }) => {
   const navigate = useNavigate(); // Inicializar useNavigate para redirecciones
-
+  const { idDelDiaDeTrabajo, loading } = useDiaTrabajo();
   const handleLogout = () => {
     setIsAuthenticated(false);
     setRole(null); // Limpiar el rol
@@ -13,8 +14,13 @@ const Header = ({ isAuthenticated, userId, role, setIsAuthenticated, setRole, se
     localStorage.removeItem('userRole');  // Limpiar el rol del usuario en localStorage
     localStorage.removeItem('userId'); // Limpiar el userId del localStorage
     navigate('/'); // Redirigir a la ruta raíz
+  
+    
+  
   };
-
+  if (loading) {
+    return <span>Cargando...</span>;
+  }
   return (
     <header>
       <img className='logo' src={logo} alt='logo'/>
@@ -22,7 +28,7 @@ const Header = ({ isAuthenticated, userId, role, setIsAuthenticated, setRole, se
       <ul className='mainNav'>
       {isAuthenticated && ( 
       <>
-           <li><Link to="/sistema">Activos</Link></li>
+           <li><Link to={`/sistema/clientes-activos/${idDelDiaDeTrabajo}`}>Activos</Link></li>
            <li><Link to="/sistema/mesas-pagadas">Pagados</Link></li>
       
        </>
