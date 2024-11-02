@@ -77,7 +77,7 @@ const ClientesPagadosDia = () => {
                     <h3>+ Nuevo cliente</h3>
                 </li>
                 {mesas.map((mesa) => (
-                    <li onClick={() => navigate(`/sistema/editar-mesa/${mesa.id}`)} key={mesa.id}>
+                    <li key={mesa.id}>
                         <h3>{mesa.Nombre}</h3>
                     </li>
                 ))}
