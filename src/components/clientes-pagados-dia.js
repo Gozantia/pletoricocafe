@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
-
+import EstadisticasVentasDia from './estadisticasVentasDia';
 const ClientesPagadosDia = () => { 
     const { idDelDiaDeTrabajo, setDiaTrabajo } = useDiaTrabajo(); // Asegúrate de que setDiaTrabajo esté disponible
     const navigate = useNavigate();
@@ -76,8 +76,11 @@ const ClientesPagadosDia = () => {
                 <li className='nuevo_cliente' onClick={() => navigate('/sistema/crear-cliente')}>
                     <h3>+ Nuevo cliente</h3>
                 </li>
+                <li className='nuevo_cliente'>
+                <EstadisticasVentasDia/>
+                </li>
                 {mesas.map((mesa) => (
-                    <li key={mesa.id}>
+                    <li onClick={() => navigate(`/sistema/editar-mesa/${mesa.id}`)} key={mesa.id}>
                         <h3>{mesa.Nombre}</h3>
                     </li>
                 ))}
