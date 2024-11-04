@@ -29,7 +29,7 @@ function TablaProductos({ productos, setProductos }) {
     const calcularTotalAcumulado = () => {
         return productos.reduce((total, producto) => {
             return total + producto.cantidad * producto.precio;
-        }, 0).toFixed(2); // Convertir a número con dos decimales
+        }, 0).toFixed(0); // Convertir a número con dos decimales
     };
 
     // Función para eliminar un producto de la lista
@@ -38,6 +38,7 @@ function TablaProductos({ productos, setProductos }) {
     };
 
     return ( <>
+     <div className="table-container">
       {productos.length > 0 ? <table className='products-table'>
             <thead>
                 <tr>
@@ -50,30 +51,31 @@ function TablaProductos({ productos, setProductos }) {
             <tbody>
                 {productos.map((producto, index) => (
                     <tr key={index}>
-                        <td>{producto.nombre}</td>
-                        <td>
+                        <td className='tabla__prod-nombre'>{producto.nombre}</td>
+                        <td className='tabla__prod-cantidad'>
                             {/* Botón para decrementar la cantidad, visible solo si la cantidad > 1 */}
                             {producto.cantidad > 1 && (
                                 <button type="button" onClick={() => disminuirCantidad(producto.id)}>-</button>
                             )}
-                            {producto.cantidad}
+                           {producto.cantidad}
                             {/* Botón para incrementar la cantidad */}
                             <button type="button" onClick={() => aumentarCantidad(producto.id)}>+</button>
                              {/* Botón para eliminar el producto de la tabla */}
                             <button onClick={() => eliminarProducto(index)}> X </button>
 
                         </td>
-                        <td>${producto.precio}</td>
-                        <td>${(producto.cantidad * producto.precio).toFixed(2)}</td>
+                        <td className='tabla__prod-precio'>${producto.precio}</td>
+                        <td>${(producto.cantidad * producto.precio).toFixed(0)}</td>
                     </tr>
                 ))}
                 {/* Fila para el total acumulado */}
                 <tr>
-                    <td colSpan="3" style={{ textAlign: 'right' }}><strong>Total</strong></td>
-                    <td>${calcularTotalAcumulado()}</td>
+                    <td colSpan="1"  style={{ textAlign: 'right' }}><strong>Total</strong></td>
+                    <td colSpan="3"  ><h3 className="total_tabla">${calcularTotalAcumulado()} </h3></td>
                 </tr>
             </tbody>
         </table> : "" }
+        </div>
     </> );
 }
 

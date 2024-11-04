@@ -87,11 +87,10 @@ th {
 }
 
 .products-table button {
-  margin: auto 3px;
+  margin: auto 7px;
   border-radius: 50%;
-  border: 1px solid;
-  font-weight: 800;
-  font-size: 12px;
+  font-weight: 700;
+  font-size: 18px;
 }
 .nombres_sugerencias {
   display:flex;
@@ -112,9 +111,12 @@ th {
 }
 .input_crear_cliente input {
   border-radius: 20px;
+  max-width: 80%;
   padding: 3px 10px;
   flex-basis: 75%;
-  font-size: 1.9rem;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 .input_crear_cliente label {
   flex-basis: 20%;
@@ -270,13 +272,21 @@ button, input {
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: calc(50% - 20px);
+  font-size: 1.3rem;
 }
+.actions > div label {
+  font-size: 1.5rem;
+  padding: 0 10px;
+  line-height: 2;
+}
+.actions > div label input[type="number"] {
+  font-size: 2rem;
+}
+
 .actions > div {
   flex-basis: calc(33% - 20px);
 }
-.actions > div > div{
- border: 1px solid blue;
-}
+
 .actions .valor_total {
   font-weight: bold;
   font-size: 1.3rem;
@@ -292,3 +302,7 @@ button, input {
   flex-basis: 20%;
 }
 
+.button-listo {
+  width: 100%;
+  font-size: 1.5rem;
+}

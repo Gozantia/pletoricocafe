@@ -131,8 +131,7 @@ function AgregarProductos() {
 
                     {pagarVisible && (
                         <div>
-                            <h3>Pagar</h3>
-
+                            
                             {/* Opciones de pago */}
                             <label>
                                 <input
@@ -182,8 +181,8 @@ function AgregarProductos() {
                                     )}
                                 </div>
                             )}
-
-                            <button onClick={manejarPago} disabled={loading}>Listo</button>
+                              <h4 className='valor_total'>Total: ${calcularTotalAcumulado()}</h4>
+                            <button onClick={manejarPago} disabled={loading} className='button-listo'>Listo</button>
                         </div>
                 
                     )}

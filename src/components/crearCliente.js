@@ -265,7 +265,7 @@ function CrearCliente() {
                     {/* Mostrar sección de pago solo cuando se selecciona "Guardar y Pagar" */}
                         {pagarVisible && (
                         <div>
-                             <h4 className='valor_total'>Total: ${calcularTotalAcumulado()}</h4>
+                            
 
                             <label>
                                 <input
@@ -315,8 +315,8 @@ function CrearCliente() {
                                     )}
                                 </div>
                             )}
-
-                            <button onClick={manejarPago} disabled={loading}>Listo</button>
+                             <h4 className='valor_total'>Total: ${calcularTotalAcumulado()}</h4>
+                            <button onClick={manejarPago} disabled={loading} className='button-listo'>Listo</button>
                         </div>
                     )}        
              </div>

@@ -11,10 +11,12 @@
   }
   
   .tab-button {
-    padding: 10px 20px;
+    padding: 10px;
     cursor: pointer;
     border: none;
     font-weight: bold;
+
+    font-size: 1.2rem;
     border-radius: 5px;
     transition: background-color 0.3s ease;
   }
@@ -30,9 +32,9 @@
   
   .productos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
     gap: 15px;
-    max-height: 100px;
+    max-height: 170px;
     overflow-x: hidden;
     overflow-y: auto;
   }
@@ -51,8 +53,9 @@
   }
   
   .producto-nombre {
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: bold;
+    letter-spacing: 1px;
   }
   
   .producto-precio {
@@ -63,3 +66,31 @@
     font-size: 1.5rem;
   }
   
+  h3.total_tabla {
+    font-size: 1.7rem;
+    letter-spacing: 2px;
+}
+
+/* Estilos generales para el contenedor de la tabla */
+.table-container {
+  overflow-x: auto; /* Permite el scroll horizontal */
+  width: 100%; /* Asegura que el contenedor no se desborde */
+}
+
+.products-table {
+  width: 100%;
+  min-width: 480px;
+}
+
+.tabla__prod-nombre {
+  width: 90px;
+  font-size: 1.4rem;
+}
+.tabla__prod-cantidad {
+  width: 150px;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.tabla__prod-precio {
+  width: 70px;
+}
