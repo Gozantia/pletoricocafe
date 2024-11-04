@@ -8,7 +8,7 @@ const ClientesActivos = () => {
     const navigate = useNavigate();
     const [mesas, setMesas] = useState([]);
     const [error, setError] = useState(null);
-
+    console.log("estamos en este dia", idDelDiaDeTrabajo);
     // Función para cargar las mesas existentes
     const fetchMesas = async () => {
         if (!idDelDiaDeTrabajo) return; // Evitar que se ejecute si idDelDiaDeTrabajo es null

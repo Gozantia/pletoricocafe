@@ -24,7 +24,7 @@ export const DiaTrabajoProvider = ({ children }) => {
     }, []);
 
     return (
-        <DiaTrabajoContext.Provider value={{ idDelDiaDeTrabajo, loading }}>
+        <DiaTrabajoContext.Provider value={{ idDelDiaDeTrabajo, setIdDelDiaDeTrabajo, loading }}>
             {children}
         </DiaTrabajoContext.Provider>
     );

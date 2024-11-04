@@ -3,66 +3,73 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
 import EstadisticasVentasDia from './estadisticasVentasDia';
+
 const ClientesPagadosDia = () => { 
-    const { idDelDiaDeTrabajo, setDiaTrabajo } = useDiaTrabajo(); // Asegúrate de que setDiaTrabajo esté disponible
+    const { idDelDiaDeTrabajo, setIdDelDiaDeTrabajo } = useDiaTrabajo();
     const navigate = useNavigate();
     const [mesas, setMesas] = useState([]);
     const [error, setError] = useState(null);
+    const [estadisticasVentas, setEstadisticasVentas] = useState({
+        efectivo: 0,
+        transferencia: 0,
+        total: 0,
+    });
 
-    // Función para cargar las mesas existentes
-    const fetchMesas = async () => {
+    // Función memoizada para cargar las mesas existentes
+    const fetchMesas = useCallback(async () => {
+        if (!idDelDiaDeTrabajo) return;
         try {
             const response = await axios.get(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo/${idDelDiaDeTrabajo}`);
             setMesas(response.data.clientes_pagados);
+            console.log( "este es el id del día de las mesas pagadas", idDelDiaDeTrabajo, "y esto es lo que esta encontrando", response.data.clientes_pagados )
         } catch (err) {
             console.error('Error al obtener mesas', err);
             setError('Aún no han pagado una mondá');
         }
-    };
+    }, [idDelDiaDeTrabajo]);
 
-    // Cargar las mesas cuando el componente se monta
+    // Cargar mesas al montar el componente
     useEffect(() => {
         fetchMesas();
-    }, []);
+    }, [fetchMesas]); // Agregamos fetchMesas a las dependencias aquí
 
-    const actualizarDatos = useCallback(() => {
-        fetchMesas(); // Llamar a la función fetchMesas para actualizar los datos
-    }, []); // Dependencias de useCallback
-
-    // Manejar el cambio de visibilidad
+    // Función para actualizar las mesas cuando la pestaña esté visible
     useEffect(() => {
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
-                // Actualizar los datos cuando la pestaña esté activa
-                actualizarDatos();
+                fetchMesas();
             }
         };
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
-
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
-    }, [actualizarDatos]); // Incluir actualizarDatos como dependencia
+    }, [fetchMesas]); // Agregamos fetchMesas a las dependencias aquí también
 
     // Función para cerrar día
     const handlecerrarDia = async (e) => {
         e.preventDefault();
         setError(null);
+         // Encapsulamos los datos en un objeto
+        const datosActualizar = {
+            dia_id: idDelDiaDeTrabajo,
+            abierto: false,
+            total_efectivo: estadisticasVentas.efectivo,
+            total_transferencia: estadisticasVentas.transferencia,
+            total: estadisticasVentas.total
+        };
+
         try {
-            // Actualizar el día de trabajo
-            const addVentatoDiaResponse = await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', {
-                dia_id: idDelDiaDeTrabajo,   // El ID del día de trabajo actual
-                abierto: false,   // Cambiando el estado a cerrado
-            });
+            const addVentatoDiaResponse = await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', datosActualizar );
 
             console.log("respuesta del evento put", addVentatoDiaResponse);
-            // Actualizar el contexto a null
-            setDiaTrabajo(null); // Esto debería funcionar ahora
-            // Volver a la lista de clientes activos
+            setIdDelDiaDeTrabajo(null); 
             navigate(`/sistema/`);
+          
         } catch (err) {
             console.error('Error al cerrar día', err);
+            console.error("Detalles del error:", err.response?.data);
             setError('No se pudo cerrar el día');
         }
     };
@@ -77,7 +84,7 @@ const ClientesPagadosDia = () => {
                     <h3>+ Nuevo cliente</h3>
                 </li>
                 <li className='nuevo_cliente'>
-                <EstadisticasVentasDia/>
+                    <EstadisticasVentasDia setEstadisticasVentas={setEstadisticasVentas} />
                 </li>
                 {mesas.map((mesa) => (
                     <li onClick={() => navigate(`/sistema/editar-mesa/${mesa.id}`)} key={mesa.id}>
@@ -85,7 +92,7 @@ const ClientesPagadosDia = () => {
                     </li>
                 ))}
             </ul>
-            <button onClick={handlecerrarDia}> Cerrar día</button>
+            <button onClick={handlecerrarDia}>Cerrar día</button>
         </main>
     );
 };

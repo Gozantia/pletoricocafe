@@ -4,8 +4,7 @@ import SeleccionarProducto from './SeleccionarProducto';
 import TablaProductos from './tablaProductos'; // Importamos el nuevo componente TablaProductos
 import sugerenciasNombres from '../sugerencias_nombres_mesas.json'; // Importamos el archivo JSON de sugerencias
 import { useNavigate } from 'react-router-dom';
-import { useDiaTrabajo } from '../DiaTrabajoContext'; // Asegúrate de que la ruta sea correcta
-
+import { useDiaTrabajo } from '../DiaTrabajoContext';
 
 
 function CrearCliente() {
@@ -19,8 +18,7 @@ function CrearCliente() {
     const [medioPago, setMedioPago] = useState('');
     const [pagarVisible, setPagarVisible] = useState(false);
     const [pagoCon, setPagoCon] = useState(0);
-
-
+    const { setIdDelDiaDeTrabajo } = useDiaTrabajo();
    
 
 
@@ -73,16 +71,18 @@ function CrearCliente() {
             // Hacer la solicitud POST a la API
             const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
             const newMesaId = response.data.cliente_id;
-            console.log(newMesaId)
+            console.log("id de la nueva mesa recien creada", newMesaId)
 
             // Actualizar el día de trabajo con el ID de la nueva mesa
            const addVentatoDiaResponse = await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', {
                 dia_id: diaId,   // El ID del día de trabajo actual
                 mesa_id: newMesaId,   // El ID de la mesa recién creada
-              
+                abierto: true
             });
-            console.log("respuesta del evento put", addVentatoDiaResponse)
+            console.log("respuesta del evento put", addVentatoDiaResponse.data)
+            console.log("la mesa se creó en este día", diaId);
             // Volver a la lista de clientes activos
+            setIdDelDiaDeTrabajo(diaId);
             navigate(`/sistema/`);
         } catch (err) {
             console.error('Error al crear mesa', err);
@@ -186,15 +186,16 @@ function CrearCliente() {
             // Hacer la solicitud POST a la API
             const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
             const newMesaId = response.data.cliente_id;
-            console.log(newMesaId)
+            console.log("id nueva mesa",newMesaId)
 
             // Actualizar el día de trabajo con el ID de la nueva mesa
            const addVentatoDiaResponse = await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', {
                 dia_id: diaId,   // El ID del día de trabajo actual
-                mesa_id: newMesaId,   // El ID de la mesa recién creada
+                mesa_id: newMesaId,
+                abierto: true   // El ID de la mesa recién creada
               
             });
-            
+            setIdDelDiaDeTrabajo(diaId);
             navigate('/sistema/mesas-pagadas');
         } catch (err) {
             console.error('Error al realizar el pago:', err);

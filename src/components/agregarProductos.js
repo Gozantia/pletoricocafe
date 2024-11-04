@@ -4,7 +4,7 @@ import SeleccionarProducto from './SeleccionarProducto';
 import TablaProductos from './tablaProductos';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function AgregarProductos({ }) {
+function AgregarProductos() {
     const { id } = useParams(); // Obtener el id de la URL
     const navigate = useNavigate();
     const [productosMesa, setProductosMesa] = useState([]);
@@ -40,7 +40,7 @@ function AgregarProductos({ }) {
     const calcularTotalAcumulado = () => {
         return productosMesa.reduce((total, producto) => {
             return total + (producto.cantidad * producto.precio);
-        }, 0).toFixed(2);
+        }, 0).toFixed(0);
     };
 
     // Función para manejar la actualización de los productos

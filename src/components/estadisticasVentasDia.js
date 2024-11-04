@@ -1,35 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
 
-const EstadisticasVentasDia = () => {
+const EstadisticasVentasDia = ( { setEstadisticasVentas }) => {
     const { idDelDiaDeTrabajo } = useDiaTrabajo();
     const [ventasEfectivo, setVentasEfectivo] = useState(0);
     const [ventasTransferencia, setVentasTransferencia] = useState(0);
     const [error, setError] = useState(null);
 
     // Función para cargar las ventas del día actual
-    const fetchVentas = async () => {
+    const fetchVentas = useCallback(async () => {
         try {
             const response = await axios.get(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo/${idDelDiaDeTrabajo}/venta`);
-            const { total_efectivo, total_transferencia} = response.data;
+            const { total_efectivo, total_transferencia } = response.data;
             setVentasEfectivo(total_efectivo);
             setVentasTransferencia(total_transferencia);
-            console.log("entró", response.data )
+            setEstadisticasVentas({
+                efectivo: total_efectivo,
+                transferencia: total_transferencia,
+                total: total_efectivo + total_transferencia,
+            });
+            console.log("Datos de ventas obtenidos:", response.data);
         } catch (err) {
             console.error('Error al obtener ventas del día:', err);
             setError('Hubo un problema al cargar las estadísticas.');
         }
-    };
+    }, [idDelDiaDeTrabajo, setEstadisticasVentas]);
 
-    // Llama a fetchVentas cuando el componente se monta
+    // Llama a fetchVentas cuando el componente se monta o cuando idDelDiaDeTrabajo cambia
     useEffect(() => {
         if (idDelDiaDeTrabajo) {
             fetchVentas();
         }
-    }, [idDelDiaDeTrabajo]);
+    }, [idDelDiaDeTrabajo, fetchVentas]);
 
-    // Función para cerrar el día de trabajo
+    // Actualiza las ventas cuando el usuario vuelve a la pestaña de la aplicación
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible' && idDelDiaDeTrabajo) {
+                fetchVentas();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [fetchVentas, idDelDiaDeTrabajo]);
 
     return (
         <div>
