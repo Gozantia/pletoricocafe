@@ -263,6 +263,9 @@ li.nuevo_cliente a {
   gap: 15px;
   margin: 15px;
   flex-wrap: wrap;
+  position: sticky;
+  bottom: 0;
+  background: #fff;
 }
 button, input {
   width: auto;
