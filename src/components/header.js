@@ -23,12 +23,13 @@ const Header = ({ isAuthenticated, userId, role, setIsAuthenticated, setRole, se
   }
   return (
     <header>
-      <img className='logo' src={logo} alt='logo'/>
+      <Link to={`/sistema`}><img className='logo' src={logo} alt='logo'/></Link>
     <nav>
       <ul className='mainNav'>
       {isAuthenticated && ( 
       <>
-           <li><Link to={`/sistema/clientes-activos/${idDelDiaDeTrabajo}`}>Activos</Link></li>
+           <li className='nuevo_cliente'> <Link to={`/sistema/crear-cliente`}>  + </Link></li>
+           
            <li><Link to="/sistema/mesas-pagadas">Pagados</Link></li>
       
        </>
@@ -44,6 +45,8 @@ const Header = ({ isAuthenticated, userId, role, setIsAuthenticated, setRole, se
             {role === 'manager' && <li><Link to="/crea-usuario">Crear Usuario</Link></li>}
             
             {role === 'manager' && <li><Link to="/sistema/ventas-mes">Ventas mes actual</Link></li>}
+            {role === 'manager' && <li><Link to={`/sistema/clientes-activos/${idDelDiaDeTrabajo}`}>Activos</Link></li>}
+
             <li><button onClick={handleLogout}>Salir</button></li>
             </ul>
           </ul>

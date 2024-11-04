@@ -57,14 +57,7 @@ ul.clientes-activos li {
 ul.clientes-activos li:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
-ul.clientes-activos li .acciones {
-  display: flex;
-}
-ul.clientes-activos li .acciones div {
-  flex: 1 1 calc(33.333% - 20px);
-  padding: 20px;
-  cursor: pointer;
-}
+
 
 ul.clientes-activos li .acciones div:nth-child(2n) {
   background: rgb(192, 247, 89);
@@ -74,8 +67,8 @@ ul.clientes-activos li .acciones div {
   background: rgb(241, 205, 163);
 }
 
-.nuevo_cliente {
-  cursor: pointer;
+ul.clientes-activos li.estadisticas_dia {
+    flex-basis: calc(75% - 20px);
 }
 
 table {
@@ -105,20 +98,33 @@ th {
   gap: 10px;
   flex-wrap: wrap;
   padding: 10px 0;
-  max-height: 54px;
+  max-height: 100px;
   overflow-x: hidden;
 }
 .nombres_sugerencias li {
-  padding: 5px 5px;
-  background-color: #d166d1;
-  min-width: 50px;
-  text-align: center;
-  border-radius: 20px;
+  padding: 5px 6px;
+    background-color: #6200ea;
+    min-width: 50px;
+    text-align: center;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 1.3rem;
 }
 .input_crear_cliente input {
   border-radius: 20px;
   padding: 3px 10px;
+  flex-basis: 75%;
+  font-size: 1.9rem;
 }
+.input_crear_cliente label {
+  flex-basis: 20%;
+}
+
+.input_crear_cliente {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 header {
   background: #1a1902;
   color: #fff;
@@ -130,14 +136,18 @@ header, main {
   padding: 15px;
 }
 .logo {
-  width: 130px;
-  height: 37px;
+  width: 85px;
+  height: 24px;
 }
 header, header nav{
   display: flex;
  
-
 }
+ul.mainNav {
+  font-size: 17px;
+  text-transform: uppercase;
+}
+
 header nav{
   flex: 2;
   justify-content: space-between;
@@ -147,7 +157,7 @@ header nav a {
   text-decoration: none;
 }
 header nav a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 header nav ul{
   list-style: none;
@@ -156,6 +166,7 @@ header nav ul{
   gap: 10px; 
   margin: 0;
   padding: 0;
+  align-items: center;
 } 
 
 .userNav ul {
@@ -171,12 +182,19 @@ header nav ul{
   display: block; /* Mostrar el menú cuando .userNavName tiene foco */
 }
 
+li.nuevo_cliente a {
+  padding: 6px 12px;
+  border: 3px solid #d59c1c;
+  border-radius: 50px;
+}
 
 .globalNav {
   width: 15px;
     height: 22px;
     transform: rotate(180deg);
     fill: #fff;
+    width: 10px;
+    height: 17px;
 }
 
 .userNavName {
@@ -187,6 +205,7 @@ header nav ul{
   padding: 0;
   margin: 0;
   text-transform: uppercase;
+  font-size: 12px;
 }
 
 .login-container {
@@ -263,3 +282,13 @@ button, input {
   font-size: 1.3rem;
   letter-spacing: 2px;
 }
+
+.input_crear_cliente {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.input_crear_cliente label {
+  flex-basis: 20%;
+}
+

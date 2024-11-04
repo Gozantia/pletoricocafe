@@ -80,10 +80,8 @@ const ClientesPagadosDia = () => {
             <h1>Clientes Pagados</h1>
         
             <ul className='clientes-activos'>
-                <li className='nuevo_cliente' onClick={() => navigate('/sistema/crear-cliente')}>
-                    <h3>+ Nuevo cliente</h3>
-                </li>
-                <li className='nuevo_cliente'>
+
+                <li className='estadisticas_dia'>
                     <EstadisticasVentasDia setEstadisticasVentas={setEstadisticasVentas} />
                 </li>
                 {mesas.map((mesa) => (

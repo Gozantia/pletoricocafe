@@ -225,7 +225,10 @@ function CrearCliente() {
                         type="text"
                         id="Nombre"
                         value={nombre}
-                        onChange={(e) => setNombre(e.target.value)}
+                        onChange={(e) => {
+                            setNombre(e.target.value);
+                            setMostrarSugerencias(e.target.value === ''); // Mostrar sugerencias solo si el input está vacío
+                        }}
                         required
                     />
                     

@@ -51,9 +51,7 @@ const ClientesActivos = () => {
             <h1>Clientes activos</h1>
         
             <ul className='clientes-activos'>
-                <li className='nuevo_cliente' onClick={() => navigate('/sistema/crear-cliente')}>
-                    <h3>+ Nuevo cliente</h3>
-                </li>
+       
                 {mesas.map((mesa) => (
                     <li onClick={() => navigate(`/sistema/editar-mesa/${mesa.id}`)} key={mesa.id}>
                         <h3>{mesa.Nombre}</h3>
