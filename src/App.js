@@ -2,18 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Sistema from './components/sistemaClientes';
 import Login from './components/login';
 import CrearUsuario from './components/crearUsuario';
 import MiPerfil from './components/miPerfil';
 import Header from './components/header'; // Importa el nuevo componente
 import ListaMesasPagadasHoy from './components/listaMesasPagadasHoy';
 import CrearCliente from './components/crearCliente';
-import AgregarProductos from './components/agregarProductos';
 import VentasMes from './components/ventas-mes';
 import ClientesActivosDia from './components/clientes-activos-dia';
 import ClientesPagadosDia from './components/clientes-pagados-dia';
 import ClientesActivos from './components/clientes-activos';
+import EditarCliente from './components/editarCliente';
 
 const App = () => {
 
@@ -76,8 +75,8 @@ const App = () => {
           element={isAuthenticated ? <ClientesPagadosDia /> : <Navigate to="/" />}
         />
         <Route
-          path="/sistema/editar-mesa/:id"
-          element={isAuthenticated ? <AgregarProductos /> : <Navigate to="/" />}
+          path="/sistema/editar-cliente/:id"
+          element={isAuthenticated ? <EditarCliente /> : <Navigate to="/" />}
         />
         
         <Route

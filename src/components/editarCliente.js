@@ -4,7 +4,7 @@ import SeleccionarProducto from './SeleccionarProducto';
 import TablaProductos from './tablaProductos';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function AgregarProductos() {
+function EditarCliente() {
     const { id } = useParams(); // Obtener el id de la URL
     const navigate = useNavigate();
     const [productosMesa, setProductosMesa] = useState([]);
@@ -56,7 +56,6 @@ function AgregarProductos() {
 
             const response = await axios.put(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${mesaInfo.id}`, mesaActualizada);
 
-            alert('Mesa actualizada con éxito');
             navigate('/sistema');
         } catch (err) {
             console.error('Error al actualizar la mesa', err);
@@ -102,13 +101,13 @@ function AgregarProductos() {
     };
 
     return (
-        <div>
+        <section className='container'>
             {loading && <p>Cargando productos...</p>}
             {error && <p>{error}</p>}
             
             {mesaInfo ? (
                 <>
-                    <h2>{mesaInfo.Nombre}</h2>
+                    <h2 className='nombre-cliente'>{mesaInfo.Nombre}</h2>
 
                     {/* Componente SeleccionarProducto */}
                     <SeleccionarProducto onSeleccionar={(producto) => {
@@ -191,8 +190,8 @@ function AgregarProductos() {
             ) : (
                 <p>Cargando información de la mesa...</p>
             )}
-        </div>
+        </section>
     );
 }
 
-export default AgregarProductos;
+export default EditarCliente;

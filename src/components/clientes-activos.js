@@ -46,20 +46,20 @@ const ClientesActivos = () => {
     }, [actualizarDatos]);
 
     return (
-        <div>
+        <section className='container'>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <h1>Clientes activos</h1>
         
             <ul className='clientes-activos'>
        
                 {mesas.map((mesa) => (
-                    <li onClick={() => navigate(`/sistema/editar-mesa/${mesa.id}`)} key={mesa.id}>
+                    <li onClick={() => navigate(`/sistema/editar-cliente/${mesa.id}`)} key={mesa.id}>
                         <h3>{mesa.Nombre}</h3>
                     </li>
                 ))}
             </ul>
             
-        </div>
+        </section>
     );
 };
 

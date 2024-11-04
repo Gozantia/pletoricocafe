@@ -208,7 +208,7 @@ function CrearCliente() {
 
 
     return (
-        <div>
+        <section className='container'>
             {/* Botón para volver a la lista de clientes activos */}
 
             <h3>Ring Ring ¡Llegó alguien!</h3>
@@ -320,7 +320,7 @@ function CrearCliente() {
                         </div>
                     )}        
              </div>
-        </div>
+        </section>
     );
 }
 

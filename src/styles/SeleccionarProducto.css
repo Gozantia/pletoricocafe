@@ -1,7 +1,7 @@
 /* SeleccionarProducto.css */
 .seleccionar-producto-container {
     max-width: 600px;
-    margin: auto auto 30px;
+    margin: auto 5px 30px;
   }
   
   .categorias-tabs {
@@ -26,9 +26,7 @@
     color: white;
   }
   
-  .tab-button:hover {
-    background-color: #bb86fc;
-  }
+
   
   .productos-grid {
     display: grid;
@@ -69,6 +67,7 @@
   h3.total_tabla {
     font-size: 1.7rem;
     letter-spacing: 2px;
+    margin: 0;
 }
 
 /* Estilos generales para el contenedor de la tabla */
@@ -80,6 +79,7 @@
 .products-table {
   width: 100%;
   min-width: 480px;
+  margin-bottom: 10px;
 }
 
 .tabla__prod-nombre {

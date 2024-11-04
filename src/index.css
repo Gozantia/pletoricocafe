@@ -30,7 +30,17 @@ body {
 body, * {
   font-family: 'Afacad Flux';
 }
+section.container {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
 
+section.container .nombre-cliente {
+  margin: 0 0 20px;
+  text-align: center;
+
+}
 ul.clientes-activos {
   display: flex;
   flex-wrap: wrap;
@@ -125,6 +135,7 @@ th {
 .input_crear_cliente {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
 header {
@@ -266,7 +277,9 @@ li.nuevo_cliente a {
   position: sticky;
   bottom: 0;
   background: #fff;
+  margin-top: auto;
 }
+
 button, input {
   width: auto;
 }

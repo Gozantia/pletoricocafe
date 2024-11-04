@@ -75,7 +75,7 @@ const ClientesPagadosDia = () => {
     };
 
     return (
-        <main>
+        <section className='container'>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <h1>Clientes Pagados</h1>
         
@@ -90,8 +90,10 @@ const ClientesPagadosDia = () => {
                     </li>
                 ))}
             </ul>
+            <div className='actions'>
             <button onClick={handlecerrarDia}>Cerrar día</button>
-        </main>
+            </div>
+        </section>
     );
 };
 
