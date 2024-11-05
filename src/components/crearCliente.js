@@ -27,60 +27,59 @@ function CrearCliente() {
         e.preventDefault();
         setLoading(true);
         setError(null);
-        //setDiaTrabajo(null);
-         // Validación: No permitir guardar si no hay productos seleccionados
-         if (productosSeleccionados.length === 0) {
+    
+        // Validación: No permitir guardar si no hay productos seleccionados
+        if (productosSeleccionados.length === 0) {
             setError('Debe seleccionar al menos un producto antes de guardar.');
             setLoading(false); // Detener la carga
             return; // Salir de la función si no hay productos
         }
-         // Validación: No permitir guardar si el nombre está vacío o solo contiene espacios
-         if (nombre.trim() === '') {
+    
+        // Validación: No permitir guardar si el nombre está vacío o solo contiene espacios
+        if (nombre.trim() === '') {
             setError('El nombre del cliente no puede estar vacío.');
             setLoading(false);
             return;
         }
-
+    
         try {
-
-                        // Verificar si hay un día de trabajo activo
-                        const diaResponse = await axios.get('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo');
-                        let diaId;
-            
-                        // Si no hay un día activo, crear uno
-                        if (diaResponse.status === 404) {
-                            const nuevoDiaResponse = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo');
-                            diaId = nuevoDiaResponse.data.data.dia_id; // ID del nuevo día de trabajo
-                            console.log("se creó un nuevo día",diaId)
-                        } else {
-                            diaId = diaResponse.data.data.dia_id;
-                            console.log("entró en este día",diaId) // ID del día de trabajo activo
-                        }
-
+            // Verificar si hay un día de trabajo activo
+            const diaResponse = await axios.get('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo');
+            let diaId;
+    
+            // Manejar respuesta en función del código de estado
+            if (diaResponse.status === 200) {
+                // Día de trabajo activo encontrado
+                diaId = diaResponse.data.data.dia_id;
+                console.log("Día de trabajo activo encontrado:", diaId);
+            } else if (diaResponse.status === 201) {
+                // Se creó un nuevo día de trabajo
+                diaId = diaResponse.data.data.dia_id;
+                console.log("Se creó un nuevo día de trabajo:", diaId);
+            }
+    
             // Crear el objeto para la nueva mesa
             const newMesa = {
                 Nombre: nombre,
                 Estado: 'activo',
-                Productos: productosSeleccionados, // Enviamos los productos seleccionados
-                DiaTrabajoId : diaId 
+                Productos: productosSeleccionados,
+                DiaTrabajoId: diaId
             };
-
-
-            
-
+    
             // Hacer la solicitud POST a la API
             const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
             const newMesaId = response.data.cliente_id;
-            console.log("id de la nueva mesa recien creada", newMesaId)
-
+            console.log("ID de la nueva mesa recién creada:", newMesaId);
+    
             // Actualizar el día de trabajo con el ID de la nueva mesa
-           const addVentatoDiaResponse = await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', {
-                dia_id: diaId,   // El ID del día de trabajo actual
-                mesa_id: newMesaId,   // El ID de la mesa recién creada
+            const addVentaToDiaResponse = await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', {
+                dia_id: diaId,
+                mesa_id: newMesaId,
                 abierto: true
             });
-            console.log("respuesta del evento put", addVentatoDiaResponse.data)
-            console.log("la mesa se creó en este día", diaId);
+            console.log("Respuesta de la actualización del día de trabajo:", addVentaToDiaResponse.data);
+            console.log("La mesa se creó en este día:", diaId);
+    
             // Volver a la lista de clientes activos
             setIdDelDiaDeTrabajo(diaId);
             navigate(`/sistema/`);
@@ -91,7 +90,8 @@ function CrearCliente() {
             setLoading(false);
         }
     };
-
+    
+    
     // Función para manejar la selección de un producto
     const handleSeleccionarProducto = (producto) => {
         if (producto) {

@@ -1,6 +1,10 @@
 import React from 'react';
 
+ 
 function TablaProductos({ productos, setProductos }) {
+
+    
+
     // Función para incrementar la cantidad de un producto
     const aumentarCantidad = (id) => {
         setProductos((prev) =>
@@ -59,7 +63,7 @@ function TablaProductos({ productos, setProductos }) {
                             )}
                            {producto.cantidad}
                             {/* Botón para incrementar la cantidad */}
-                            <button type="button" onClick={() => aumentarCantidad(producto.id)}>+</button>
+                            <button type="button" onClick={() => aumentarCantidad(producto.id)}> + </button>
                              {/* Botón para eliminar el producto de la tabla */}
                             <button onClick={() => eliminarProducto(index)}> X </button>
 

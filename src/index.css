@@ -97,11 +97,17 @@ th {
 }
 
 .products-table button {
-  margin: auto 7px;
-  border-radius: 50%;
-  font-weight: 700;
-  font-size: 18px;
+  margin: auto 6px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 6px 10px;
 }
+.products-table button:last-child {
+  margin-right: 0;
+  background: #913a07;
+}
+
 .nombres_sugerencias {
   display:flex;
   gap: 10px;

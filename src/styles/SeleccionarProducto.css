@@ -35,7 +35,19 @@
     max-height: 170px;
     overflow-x: hidden;
     overflow-y: auto;
+    transition: transform 0.2s ease, opacity 0.3s ease;
   }
+
+  .productos-grid.animating {
+    transform: translateX(-5%); /* Cambia a -100% o 100% según el sentido de la animación */
+    opacity: 0;
+  }
+  
+  .productos-grid:not(.animating) {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
   
   .producto-item {
     padding: 10px;
@@ -84,13 +96,18 @@
 
 .tabla__prod-nombre {
   width: 90px;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 }
 .tabla__prod-cantidad {
-  width: 150px;
-  font-size: 1.3rem;
+  width: 120px;
+  font-size: 1.2rem;
   font-weight: 700;
 }
+.products-table button:last-child {
+  margin-right: 0;
+  background: #913a07;
+}
+
 .tabla__prod-precio {
   width: 70px;
 }

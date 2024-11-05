@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/SeleccionarProducto.css'; // Archivo CSS para estilos
+import '../styles/SeleccionarProducto.css';
 
 const SeleccionarProducto = ({ onSeleccionar }) => {
   const [productos, setProductos] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
+  const [categorias, setCategorias] = useState([]);
+  const [animating, setAnimating] = useState(false); // Estado para la animación
+  
+  let touchStartX = 0;
+  let touchEndX = 0;
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -12,9 +17,9 @@ const SeleccionarProducto = ({ onSeleccionar }) => {
         const data = await response.json();
         setProductos(data); 
         
-        // Selecciona la primera categoría por defecto
-        const categorias = [...new Set(data.map(producto => producto.categoria))];
-        setCategoriaSeleccionada(categorias.reverse()[0]); // Categoría invertida (última categoría primero)
+        const categorias = [...new Set(data.map(producto => producto.categoria))].reverse();
+        setCategorias(categorias);
+        setCategoriaSeleccionada(categorias[0]);
       } catch (error) {
         console.error('Error fetching productos:', error);
       }
@@ -23,7 +28,6 @@ const SeleccionarProducto = ({ onSeleccionar }) => {
     fetchProductos();
   }, []);
 
-  // Agrupar productos por categoría
   const productosPorCategoria = productos.reduce((acc, producto) => {
     const { categoria } = producto;
     if (!acc[categoria]) acc[categoria] = [];
@@ -31,20 +35,62 @@ const SeleccionarProducto = ({ onSeleccionar }) => {
     return acc;
   }, {});
 
-  // Manejar la selección de un producto
   const handleSelectProducto = (producto) => {
     onSeleccionar(producto);
   };
 
+  const handleSwipe = (direction) => {
+    const currentIndex = categorias.indexOf(categoriaSeleccionada);
+    if (direction === 'left' && currentIndex < categorias.length - 1) {
+      setAnimating(true);
+      setTimeout(() => {
+        setCategoriaSeleccionada(categorias[currentIndex + 1]);
+        setAnimating(false);
+      }, 200); // Duración de la animación en ms
+    } else if (direction === 'right' && currentIndex > 0) {
+      setAnimating(true);
+      setTimeout(() => {
+        setCategoriaSeleccionada(categorias[currentIndex - 1]);
+        setAnimating(false);
+      }, 200);
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartX = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX - touchEndX > 50) {
+      handleSwipe('left');
+    } else if (touchEndX - touchStartX > 50) {
+      handleSwipe('right');
+    }
+  };
+
   return (
-    <div className="seleccionar-producto-container">
-      {/* Pestañas de categorías */}
+    <div 
+      className="seleccionar-producto-container"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <div className="categorias-tabs">
-        {Object.keys(productosPorCategoria).reverse().map((categoria) => (
+        {categorias.map((categoria) => (
           <button
             key={categoria}
             className={`tab-button ${categoria === categoriaSeleccionada ? 'active' : ''}`}
-            onClick={() => setCategoriaSeleccionada(categoria)}
+            onClick={() => {
+              setAnimating(true);
+              setTimeout(() => {
+                setCategoriaSeleccionada(categoria);
+                setAnimating(false);
+              }, 300);
+            }}
             type="button" 
           >
             {categoria}
@@ -52,8 +98,8 @@ const SeleccionarProducto = ({ onSeleccionar }) => {
         ))}
       </div>
 
-      {/* Lista de productos según la categoría seleccionada */}
-      <div className="productos-grid">
+      {/* Lista de productos con clase de animación */}
+      <div className={`productos-grid ${animating ? 'animating' : ''}`}>
         {productosPorCategoria[categoriaSeleccionada]?.map((producto) => (
           <div
             key={producto.id}
@@ -61,7 +107,6 @@ const SeleccionarProducto = ({ onSeleccionar }) => {
             onClick={() => handleSelectProducto(producto)}
           >
             <div className="producto-nombre">{producto.nombre}</div>
-
           </div>
         ))}
       </div>

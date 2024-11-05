@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
+import VentasDelMes from './ventasMes';
 
 const ClientesActivos = () => { 
     const { idDelDiaDeTrabajo } = useDiaTrabajo();
@@ -58,7 +59,7 @@ const ClientesActivos = () => {
                     </li>
                 ))}
             </ul>
-            
+            <VentasDelMes />
         </section>
     );
 };
