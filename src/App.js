@@ -13,7 +13,7 @@ import ClientesActivosDia from './components/clientes-activos-dia';
 import ClientesPagadosDia from './components/clientes-pagados-dia';
 import ClientesActivos from './components/clientes-activos';
 import EditarCliente from './components/editarCliente';
-
+import VerCliente from './components/verCliente';
 const App = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -78,7 +78,10 @@ const App = () => {
           path="/sistema/editar-cliente/:id"
           element={isAuthenticated ? <EditarCliente /> : <Navigate to="/" />}
         />
-        
+        <Route
+          path="/sistema/ver-cliente/:id"
+          element={isAuthenticated ? <VerCliente role={role} /> : <Navigate to="/" />}
+        />
         <Route
           path="/sistema/clientes-activos/:id"
           element={isAuthenticated ? <ClientesActivosDia /> : <Navigate to="/" />}

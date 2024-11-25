@@ -85,7 +85,7 @@ const ClientesPagadosDia = () => {
                     <EstadisticasVentasDia setEstadisticasVentas={setEstadisticasVentas} />
                 </li>
                 {mesas.map((mesa) => (
-                    <li onClick={() => navigate(`/sistema/editar-mesa/${mesa.id}`)} key={mesa.id}>
+                    <li onClick={() => navigate(`/sistema/ver-cliente/${mesa.id}`)} key={mesa.id}>
                         <h3>{mesa.Nombre}</h3>
                     </li>
                 ))}

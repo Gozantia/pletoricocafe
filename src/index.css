@@ -328,3 +328,9 @@ button, input {
   width: 100%;
   font-size: 1.5rem;
 }
+.ver-clientes .products-table button{
+  display: none;
+}
+.ver-clientes .tabla__prod-cantidad {
+  width: 70px;
+}

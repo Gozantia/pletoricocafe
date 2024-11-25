@@ -9,7 +9,12 @@ const ClientesActivos = () => {
     const navigate = useNavigate();
     const [mesas, setMesas] = useState([]);
     const [error, setError] = useState(null);
-    console.log("estamos en este dia", idDelDiaDeTrabajo);
+    const [isOptionsVisible, setOptionsVisible] = useState(false);
+    const [selectedMesa, setSelectedMesa] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    let pressTimer;
+  
     // Función para cargar las mesas existentes
     const fetchMesas = async () => {
         if (!idDelDiaDeTrabajo) return; // Evitar que se ejecute si idDelDiaDeTrabajo es null
@@ -46,6 +51,31 @@ const ClientesActivos = () => {
         };
     }, [actualizarDatos]);
 
+    const handleLongPressStart = (mesa) => {
+        pressTimer = setTimeout(() => {
+            setOptionsVisible(true);
+            setSelectedMesa(mesa);
+        }, 1000); // 1 segundo para activar el menú
+    };
+
+    const handleLongPressEnd = () => {
+        clearTimeout(pressTimer);
+    };
+
+    const handleEliminarMesa = async () => {
+        try {
+            setLoading(true);
+            await axios.delete(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${selectedMesa.id}`);
+            setOptionsVisible(false);
+            // Actualizar lista o hacer alguna acción después de eliminar
+        } catch (err) {
+            console.error('Error al eliminar la mesa', err);
+            setError('No se pudo eliminar la mesa');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <section className='container'>
             {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -54,11 +84,23 @@ const ClientesActivos = () => {
             <ul className='clientes-activos'>
        
                 {mesas.map((mesa) => (
-                    <li onClick={() => navigate(`/sistema/editar-cliente/${mesa.id}`)} key={mesa.id}>
+                    <li key={mesa.id}
+                    onTouchStart={() => handleLongPressStart(mesa)}
+                    onTouchEnd={handleLongPressEnd}
+                    onMouseDown={() => handleLongPressStart(mesa)}
+                    onMouseUp={handleLongPressEnd}
+                    onClick={() => navigate(`/sistema/editar-cliente/${mesa.id}`
+                    )}>
                         <h3>{mesa.Nombre}</h3>
                     </li>
                 ))}
             </ul>
+            {isOptionsVisible && (
+                <div className="opciones-menu">
+                    <button onClick={handleEliminarMesa}>Eliminar</button>
+                </div>
+            )}
+
             <VentasDelMes />
         </section>
     );
