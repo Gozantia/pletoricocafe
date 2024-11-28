@@ -334,3 +334,15 @@ button, input {
 .ver-clientes .tabla__prod-cantidad {
   width: 70px;
 }
+
+tr.ventas-altas {
+  background: #94f774;
+}
+
+
+tr.ventas-mas-altas {
+  background: #3feb06;
+}
+tr.ventas-bajas {
+  background: #f36b6b;
+}

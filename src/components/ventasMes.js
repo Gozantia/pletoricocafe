@@ -32,12 +32,15 @@ const VentasDelMes = () => {
 
         fetchData();
     }, []); // Solo se ejecuta al montar el componente
+   
+    const filteredItems = ventas.filter(venta => venta.total_ventas !== 0);
+    const ventasOrdenadas=filteredItems.sort((a, b) => new Date(b.fecha_inicio) - new Date(a.fecha_inicio));
+    const diasTrabajados= filteredItems.length
 
     // Calcular totales
-    const totalEfectivo = ventas.reduce((acc, venta) => acc + (venta.total_efectivo || 0), 0);
-    const totalTransferencia = ventas.reduce((acc, venta) => acc + (venta.total_transferencia || 0), 0);
-    const totalVentas = ventas.reduce((acc, venta) => acc + (venta.total_ventas || 0), 0);
-
+    const totalEfectivo = ventasOrdenadas.reduce((acc, venta) => acc + (venta.total_efectivo || 0), 0).toLocaleString('es-ES');
+    const totalTransferencia = ventasOrdenadas.reduce((acc, venta) => acc + (venta.total_transferencia || 0), 0).toLocaleString('es-ES');
+    const totalVentas = ventasOrdenadas.reduce((acc, venta) => acc + (venta.total_ventas || 0), 0).toLocaleString('es-ES');
     // Función para extraer solo mes y día de la fecha_inicio
      // Función para extraer solo mes y día en formato "MM-DD"
      const formatFecha = (fecha) => {
@@ -53,7 +56,8 @@ const VentasDelMes = () => {
 
     return (
         <div>
-        <h2>Ventas del Mes</h2>
+        <h2>Ventas del Mes: <strong>{totalVentas}</strong> </h2>
+        <span> Número de días trabajados:  {diasTrabajados} </span>
         <table>
             <thead>
                 <tr>
@@ -64,12 +68,15 @@ const VentasDelMes = () => {
                 </tr>
             </thead>
             <tbody>
-                {ventas.map((venta, index) => (
-                    <tr key={index}>
+                {ventasOrdenadas.map((venta, index) => (
+                    <tr key={index} className={venta.total_ventas > 300000 ? 'ventas-mas-altas' :
+                                    venta.total_ventas >  180000 ? 'ventas-altas' :
+                                    venta.total_ventas < 103000 ? 'ventas-bajas' : ''
+                    }>
                         <td>{formatFecha(venta.fecha_inicio)}</td>
-                        <td>{venta.total_efectivo}</td>
-                        <td>{venta.total_transferencia}</td>
-                        <td>{venta.total_ventas}</td>
+                        <td>{venta.total_efectivo.toLocaleString('es-ES')}</td>
+                        <td>{venta.total_transferencia.toLocaleString('es-ES')}</td>
+                        <td >{venta.total_ventas.toLocaleString('es-ES')}</td>
                     </tr>
                 ))}
                 {/* Fila de Totales */}
