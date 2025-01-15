@@ -14,6 +14,7 @@ const ClientesPagadosDia = () => {
         transferencia: 0,
         total: 0,
     });
+    const [actionPopup, setActionPopup] = useState(false);
 
     // Función memoizada para cargar las mesas existentes
     const fetchMesas = useCallback(async () => {
@@ -48,8 +49,7 @@ const ClientesPagadosDia = () => {
     }, [fetchMesas]); // Agregamos fetchMesas a las dependencias aquí también
 
     // Función para cerrar día
-    const handlecerrarDia = async (e) => {
-        e.preventDefault();
+    const handlecerrarDia = async () => {
         setError(null);
          // Encapsulamos los datos en un objeto
         const datosActualizar = {
@@ -73,6 +73,15 @@ const ClientesPagadosDia = () => {
             setError('No se pudo cerrar el día');
         }
     };
+    
+        const handleOpenPopup = () => setActionPopup(true);
+        const handleClosePopup = () => setActionPopup(false);
+            
+        const handleConfirm = () => {
+            handlecerrarDia();
+            setActionPopup(false);
+          };
+
 
     return (
         <section className='container'>
@@ -91,7 +100,14 @@ const ClientesPagadosDia = () => {
                 ))}
             </ul>
             <div className='actions'>
-            <button onClick={handlecerrarDia}>Cerrar día</button>
+            <button onClick={handleOpenPopup}>Cerrar día</button>
+            </div>
+            
+            <div className={`popup-actions ${actionPopup ? "active" : ""}`}>
+                <div className='popup_actions-content'>
+                <h3>¿Estás seguro?</h3>
+                <button onClick={handleConfirm}>  Si</button> <button onClick={handleClosePopup}> No </button>
+                </div>
             </div>
         </section>
     );
