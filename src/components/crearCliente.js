@@ -51,7 +51,7 @@ function CrearCliente() {
             if (diaResponse.status === 200) {
                 // Día de trabajo activo encontrado
                 diaId = diaResponse.data.data.dia_id;
-                console.log("Día de trabajo activo encontrado:", diaId);
+   
             } else if (diaResponse.status === 201) {
                 // Se creó un nuevo día de trabajo
                 diaId = diaResponse.data.data.dia_id;

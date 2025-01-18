@@ -94,7 +94,8 @@ const ClientesActivos = () => {
                         <h3>{mesa.Nombre}</h3>
                     </li>
                 ))}
-            </ul>
+            </ul> 
+            <button onClick={() => navigate(`/sistema/registrar-gasto`)} >Agregar gastos</button>
             {isOptionsVisible && (
                 <div className="opciones-menu">
                     <button onClick={handleEliminarMesa}>Eliminar</button>

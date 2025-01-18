@@ -14,6 +14,7 @@ import ClientesPagadosDia from './components/clientes-pagados-dia';
 import ClientesActivos from './components/clientes-activos';
 import EditarCliente from './components/editarCliente';
 import VerCliente from './components/verCliente';
+import CrearGastos from './components/crearGastos';
 const App = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -69,6 +70,10 @@ const App = () => {
         <Route
           path="/sistema/crear-cliente"
           element={isAuthenticated ? <CrearCliente /> : <Navigate to="/" />}
+        />
+          <Route
+          path="/sistema/registrar-gasto"
+          element={isAuthenticated ? <CrearGastos /> : <Navigate to="/" />}
         />
         <Route
           path="/sistema/mesas-pagadas"

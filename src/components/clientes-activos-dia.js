@@ -60,7 +60,7 @@ const ClientesActivosDia = () => {
                     </li>
                 ))}
             </ul>
-            
+            <button>Agregar gastos</button>
         </div>
     );
 };
