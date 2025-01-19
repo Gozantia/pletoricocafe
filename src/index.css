@@ -412,7 +412,7 @@ tr.ventas-bajas {
 }
 
 .container_egresos .actions button {
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: 10px 5px;
 }
 
@@ -484,4 +484,25 @@ tr.ventas-bajas {
 
 .custom-dropdown::after {
   color: rgba(0,0,0,.4);
+}
+
+.clientes-activos.gastos h3 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.clientes-activos.gastos li {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 15px 10px;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.stats-box {
+  display: flex;
+  gap:15px;
+}
+.stats-box h3 {
+  margin: 0;
 }

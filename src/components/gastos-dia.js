@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
-import EstadisticasGastosDia from './estadisticasComprasDia';
+
 import GastosDelMes from './gastosMes';
 const GastosDia = () => { 
     const { idDelDiaDeTrabajo } = useDiaTrabajo();
@@ -47,14 +47,15 @@ const GastosDia = () => {
         <section className='container'>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <h1>Egresos registrados</h1>
-            <ul className='clientes-activos'>
+            <ul className='clientes-activos gastos'>
                 {gastosDia.map((gasto) => (
                     <li key={gasto.id}>
                         <h3>{gasto.descripcion}</h3>
+                        <span>{gasto.valor}</span>
                     </li>
                 ))}
             </ul>
-            <EstadisticasGastosDia/>
+      
             <GastosDelMes/>
         </section>
     );

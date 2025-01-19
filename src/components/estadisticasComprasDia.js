@@ -56,20 +56,13 @@ const EstadisticasGastosDia = () => {
     }
 
     return (
-        <div style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            borderRadius: "5px",
-            maxWidth: "300px",
-            margin: "20px auto",
-            textAlign: "center"
-        }}>
-            <h3>Compras del día</h3>
+        <div className='stats-box'>
+            <h3>Hoy:</h3>
             {resultado ? (
                 <>
-                    <p><strong>Transferencia:</strong> ${resultado.gastos_transferencia}</p>
-                    <p><strong>Efectivo:</strong> ${resultado.gastos_efectivo}</p>
-                    <p><strong>Total:</strong> ${resultado.total_gastos}</p>
+                    <span><strong>Trans:</strong> ${resultado.gastos_transferencia.toLocaleString('es-ES')}</span>
+                    <span><strong>Cash:</strong> ${resultado.gastos_efectivo.toLocaleString('es-ES')}</span>
+                    <span><strong>Total:</strong> ${resultado.total_gastos.toLocaleString('es-ES')}</span>
                 </>
             ) : (
                 <p>No se encontraron datos.</p>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useDiaTrabajo } from '../DiaTrabajoContext'; // Ruta corregida para el contexto
 import GastosDia from './gastos-dia';
+import EstadisticasGastosDia from './estadisticasComprasDia';
 const CrearGastos = () => {
   const dia = useDiaTrabajo();
   const [mensajeExito, setMensajeExito] = useState(''); // Estado para el mensaje de éxito
@@ -75,6 +76,7 @@ const CrearGastos = () => {
 
   return (
     <div className='container_egresos' >
+            <EstadisticasGastosDia/>
       <h2>Registrar egresos</h2>
       {gastos.map((gasto, index) => (
         <div key={index} style={{ marginBottom: '10px' }} className='container_egresos-form'>
@@ -125,7 +127,7 @@ const CrearGastos = () => {
       ))}
        {mensajeExito && <p style={{ color: 'green' }}>{mensajeExito}</p>}
       <div className="actions"> 
-      <button onClick={agregarFormulario}>Agregar otro egreso</button>
+      <button onClick={agregarFormulario}>Agregar otro</button>
       <button onClick={guardarGastos} disabled={loading}>
         {loading ? 'Guardando...' : 'Guardar Gastos'}
       </button>
