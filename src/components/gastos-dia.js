@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
 
-import GastosDelMes from './gastosMes';
 const GastosDia = () => { 
     const { idDelDiaDeTrabajo } = useDiaTrabajo();
     const [gastosDia, setGastosDia] = useState([]);
@@ -44,7 +43,7 @@ const GastosDia = () => {
 
    */ 
     return (
-        <section className='container'>
+        <section>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <h1>Egresos registrados</h1>
             <ul className='clientes-activos gastos'>
@@ -56,7 +55,7 @@ const GastosDia = () => {
                 ))}
             </ul>
       
-            <GastosDelMes/>
+           
         </section>
     );
 };

@@ -3,8 +3,11 @@ import axios from 'axios';
 import { useDiaTrabajo } from '../DiaTrabajoContext'; // Ruta corregida para el contexto
 import GastosDia from './gastos-dia';
 import EstadisticasGastosDia from './estadisticasComprasDia';
+import { useNavigate } from 'react-router-dom';
+
 const CrearGastos = () => {
   const dia = useDiaTrabajo();
+  const navigate = useNavigate();
   const [mensajeExito, setMensajeExito] = useState(''); // Estado para el mensaje de éxito
   const [gastos, setGastos] = useState([
     { descripcion: '', cantidad: '', valor: '', medio: 'efectivo', tipo: 'insumo' },
@@ -127,13 +130,14 @@ const CrearGastos = () => {
       ))}
        {mensajeExito && <p style={{ color: 'green' }}>{mensajeExito}</p>}
       <div className="actions"> 
-      <button onClick={agregarFormulario}>Agregar otro</button>
+      <button onClick={agregarFormulario}>Agregar más</button>
       <button onClick={guardarGastos} disabled={loading}>
         {loading ? 'Guardando...' : 'Guardar Gastos'}
       </button>
       </div>
 
       <GastosDia/>
+      <button onClick={() => navigate(`/sistema/gastos-mes-actual`)} >Egresos del mes</button>
     </div>
   );
 };

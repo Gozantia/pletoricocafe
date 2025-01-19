@@ -6,15 +6,15 @@ import Login from './components/login';
 import CrearUsuario from './components/crearUsuario';
 import MiPerfil from './components/miPerfil';
 import Header from './components/header'; // Importa el nuevo componente
-import ListaMesasPagadasHoy from './components/listaMesasPagadasHoy';
 import CrearCliente from './components/crearCliente';
-import VentasMes from './components/ventas-mes';
+import VentasMes from './components/ventasMes';
 import ClientesActivosDia from './components/clientes-activos-dia';
 import ClientesPagadosDia from './components/clientes-pagados-dia';
 import ClientesActivos from './components/clientes-activos';
 import EditarCliente from './components/editarCliente';
 import VerCliente from './components/verCliente';
 import CrearGastos from './components/crearGastos';
+import GastosDelMes from './components/gastosMes';
 const App = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -72,7 +72,7 @@ const App = () => {
           element={isAuthenticated ? <CrearCliente /> : <Navigate to="/" />}
         />
           <Route
-          path="/sistema/registrar-gasto"
+          path="/sistema/egresos"
           element={isAuthenticated ? <CrearGastos /> : <Navigate to="/" />}
         />
         <Route
@@ -97,11 +97,15 @@ const App = () => {
           element={isAuthenticated && role === 'manager' ? <CrearUsuario /> : <Navigate to="/" />}
         />
         <Route
-          path="/sistema/ventas-mes"
+          path="/sistema/ventas-mes-actual"
           element={isAuthenticated ? <VentasMes /> : <Navigate to="/" />}
         />
+        <Route
+          path="/sistema/gastos-mes-actual"
+          element={isAuthenticated ? <GastosDelMes /> : <Navigate to="/" />}
+        />
         <Route path="/mi-perfil/:id" element={<MiPerfil />} />
-      </Routes>
+      </Routes> 
     </main>
     </Router>
    

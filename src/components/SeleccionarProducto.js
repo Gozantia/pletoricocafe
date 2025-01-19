@@ -7,8 +7,7 @@ const SeleccionarProducto = ({ onSeleccionar }) => {
   const [categorias, setCategorias] = useState([]);
   const [animating, setAnimating] = useState(false); // Estado para la animación
   
-  let touchStartX = 0;
-  let touchEndX = 0;
+
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -39,45 +38,14 @@ const SeleccionarProducto = ({ onSeleccionar }) => {
     onSeleccionar(producto);
   };
 
-  const handleSwipe = (direction) => {
-    const currentIndex = categorias.indexOf(categoriaSeleccionada);
-    if (direction === 'left' && currentIndex < categorias.length - 1) {
-      setAnimating(true);
-      setTimeout(() => {
-        setCategoriaSeleccionada(categorias[currentIndex + 1]);
-        setAnimating(false);
-      }, 200); // Duración de la animación en ms
-    } else if (direction === 'right' && currentIndex > 0) {
-      setAnimating(true);
-      setTimeout(() => {
-        setCategoriaSeleccionada(categorias[currentIndex - 1]);
-        setAnimating(false);
-      }, 200);
-    }
-  };
+ 
 
-  const handleTouchStart = (e) => {
-    touchStartX = e.touches[0].clientX;
-  };
 
-  const handleTouchMove = (e) => {
-    touchEndX = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStartX - touchEndX > 50) {
-      handleSwipe('left');
-    } else if (touchEndX - touchStartX > 50) {
-      handleSwipe('right');
-    }
-  };
 
   return (
     <div 
       className="seleccionar-producto-container"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+
     >
       <div className="categorias-tabs">
         {categorias.map((categoria) => (

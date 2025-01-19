@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
-import VentasDelMes from './ventasMes';
+
 
 const ClientesActivos = () => { 
     const { idDelDiaDeTrabajo } = useDiaTrabajo();
@@ -12,6 +12,7 @@ const ClientesActivos = () => {
     const [isOptionsVisible, setOptionsVisible] = useState(false);
     const [selectedMesa, setSelectedMesa] = useState(null);
     const [loading, setLoading] = useState(false);
+
 
     let pressTimer;
   
@@ -55,6 +56,7 @@ const ClientesActivos = () => {
         pressTimer = setTimeout(() => {
             setOptionsVisible(true);
             setSelectedMesa(mesa);
+            
         }, 1000); // 1 segundo para activar el menú
     };
 
@@ -67,6 +69,7 @@ const ClientesActivos = () => {
             setLoading(true);
             await axios.delete(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${selectedMesa.id}`);
             setOptionsVisible(false);
+            actualizarDatos();
             // Actualizar lista o hacer alguna acción después de eliminar
         } catch (err) {
             console.error('Error al eliminar la mesa', err);
@@ -95,14 +98,21 @@ const ClientesActivos = () => {
                     </li>
                 ))}
             </ul> 
-            <button onClick={() => navigate(`/sistema/registrar-gasto`)} >Agregar gastos</button>
+            
             {isOptionsVisible && (
+             
+                <div className="popup-actions active">
+                <div className='popup_actions-content'>
                 <div className="opciones-menu">
                     <button onClick={handleEliminarMesa}>Eliminar</button>
                 </div>
+                </div>
+            </div>
             )}
-
-            <VentasDelMes />
+            <div className='actions'>
+            <button onClick={() => navigate(`/sistema/egresos`)} >Egresos</button>
+            <button onClick={() => navigate(`/sistema/ventas-mes-actual`)} > Estadísticas</button>
+            </div>
         </section>
     );
 };
