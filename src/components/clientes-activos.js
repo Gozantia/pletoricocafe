@@ -111,7 +111,7 @@ const ClientesActivos = () => {
             )}
             <div className='actions'>
             <button onClick={() => navigate(`/sistema/egresos`)} >Egresos</button>
-            <button onClick={() => navigate(`/sistema/ventas-mes-actual`)} > Estadísticas</button>
+            <button onClick={() => navigate(`/sistema/estadisticas`)} > Estadísticas</button>
             </div>
         </section>
     );

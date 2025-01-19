@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const GastosDelMes = () => {
+const GastosDelMes = ({ onTotalGastosChange }) => {
     const [gastos, setGastos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -41,6 +41,13 @@ const GastosDelMes = () => {
     const totalEfectivo = gastosOrdenados.reduce((acc, gasto) => acc + (gasto.gastos_efectivo || 0), 0).toLocaleString('es-ES');
     const totalTransferencia = gastosOrdenados.reduce((acc, gasto) => acc + (gasto.gastos_transferencia || 0), 0).toLocaleString('es-ES');
     const totalGastos = gastosOrdenados.reduce((acc, gasto) => acc + (gasto.total_gastos || 0), 0).toLocaleString('es-ES');
+
+    // Notificar al componente padre cuando cambie `totalGastos`
+    useEffect(() => {
+        onTotalGastosChange(totalGastos);
+    }, [totalGastos, onTotalGastosChange]);
+
+
     
     // Función para extraer solo mes y día en formato "MM-DD"
     const formatFecha = (fecha) => {
@@ -55,7 +62,7 @@ const GastosDelMes = () => {
 
     return (
         <div>
-            <h2>Gastos del Mes: <strong>{totalGastos}</strong> </h2>
+            <h2>Gastos del Mes </h2>
             <table>
                 <thead>
                     <tr>

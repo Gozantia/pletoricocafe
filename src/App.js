@@ -15,6 +15,7 @@ import EditarCliente from './components/editarCliente';
 import VerCliente from './components/verCliente';
 import CrearGastos from './components/crearGastos';
 import GastosDelMes from './components/gastosMes';
+import Estadisticas from './components/estadisticas';
 const App = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -104,6 +105,11 @@ const App = () => {
           path="/sistema/gastos-mes-actual"
           element={isAuthenticated ? <GastosDelMes /> : <Navigate to="/" />}
         />
+        <Route
+          path="/sistema/estadisticas"
+          element={isAuthenticated ? <Estadisticas /> : <Navigate to="/" />}
+        />
+
         <Route path="/mi-perfil/:id" element={<MiPerfil />} />
       </Routes> 
     </main>

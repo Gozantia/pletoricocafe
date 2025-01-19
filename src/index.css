@@ -31,7 +31,7 @@ body, * {
   font-family: 'Afacad Flux';
 }
 section.container {
-  min-height: 90vh;
+  min-height: 50vh;
   display: flex;
   flex-direction: column;
 }
@@ -502,7 +502,24 @@ tr.ventas-bajas {
 .stats-box {
   display: flex;
   gap:15px;
+  margin-bottom: 20px;
+  justify-content: center;
 }
 .stats-box h3 {
   margin: 0;
+}
+.stats-chart {
+  max-height: 300px;
+  overflow: hidden;
+  overflow-y: auto;
+  width: 80%;
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #333;
+}
+
+
+.summary-stats span {
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }

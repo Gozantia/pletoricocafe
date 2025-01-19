@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const VentasDelMes = () => {
+const VentasDelMes = ({ onTotalVentasChange }) => {
     const [ventas, setVentas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -41,6 +41,12 @@ const VentasDelMes = () => {
     const totalEfectivo = ventasOrdenadas.reduce((acc, venta) => acc + (venta.total_efectivo || 0), 0).toLocaleString('es-ES');
     const totalTransferencia = ventasOrdenadas.reduce((acc, venta) => acc + (venta.total_transferencia || 0), 0).toLocaleString('es-ES');
     const totalVentas = ventasOrdenadas.reduce((acc, venta) => acc + (venta.total_ventas || 0), 0).toLocaleString('es-ES');
+
+      // Notificar al componente padre cuando cambie `totalVentas`
+        useEffect(() => {
+            onTotalVentasChange(totalVentas);
+        }, [totalVentas, onTotalVentasChange]);
+
     // Función para extraer solo mes y día de la fecha_inicio
      // Función para extraer solo mes y día en formato "MM-DD"
      const formatFecha = (fecha) => {
@@ -56,7 +62,7 @@ const VentasDelMes = () => {
 
     return (
         <div>
-        <h2>Ventas del Mes: <strong>{totalVentas}</strong> </h2>
+        <h2>Ventas del Mes </h2>
         <span> Número de días trabajados:  {diasTrabajados} </span>
         <table>
             <thead>

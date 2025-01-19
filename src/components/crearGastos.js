@@ -102,7 +102,7 @@ const CrearGastos = () => {
             value={gasto.valor}
             onChange={(e) => actualizarCampo(index, 'valor', e.target.value)}
           />
-          <span class="custom-dropdown big">
+          <span className="custom-dropdown big">
           <select
             value={gasto.medio}
             onChange={(e) => actualizarCampo(index, 'medio', e.target.value)}
@@ -137,7 +137,7 @@ const CrearGastos = () => {
       </div>
 
       <GastosDia/>
-      <button onClick={() => navigate(`/sistema/gastos-mes-actual`)} >Egresos del mes</button>
+      <button onClick={() => navigate(`/sistema/estadisticas`)} > Estadísticas</button>
     </div>
   );
 };
