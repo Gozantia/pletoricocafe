@@ -97,6 +97,7 @@ const CrearGastos = () => {
             value={gasto.valor}
             onChange={(e) => actualizarCampo(index, 'valor', e.target.value)}
           />
+          <span class="custom-dropdown big">
           <select
             value={gasto.medio}
             onChange={(e) => actualizarCampo(index, 'medio', e.target.value)}
@@ -105,6 +106,8 @@ const CrearGastos = () => {
             <option value="efectivo" defaultValue>efectivo</option>
             <option value="transferencia">transferencia</option>
           </select>
+          </span>
+          <span className="custom-dropdown big">
           <select
               value={gasto.tipo}
               onChange={(e) => actualizarCampo(index, 'tipo', e.target.value)}
@@ -117,6 +120,7 @@ const CrearGastos = () => {
               <option value="Aseo">aseo</option>
               <option value="Vacuna">vacuna</option>
             </select>
+            </span>
         </div>
       ))}
        {mensajeExito && <p style={{ color: 'green' }}>{mensajeExito}</p>}

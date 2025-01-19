@@ -67,12 +67,14 @@ const GastosDelMes = () => {
                 </thead>
                 <tbody>
                     {gastosOrdenados.map((gasto, index) => (
+                        gasto.total_gastos !== 0 && (
                         <tr key={index}>
                             <td>{formatFecha(gasto.fecha_inicio)}</td>
                             <td>{(gasto.gastos_efectivo || 0).toLocaleString('es-ES')}</td>
                             <td>{(gasto.gastos_transferencia || 0).toLocaleString('es-ES')}</td>
                             <td>{(gasto.total_gastos || 0).toLocaleString('es-ES')}</td>
                         </tr>
+                        )
                     ))}
                     <tr>
                         <td><strong>Totales</strong></td>
