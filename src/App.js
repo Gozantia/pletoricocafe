@@ -16,6 +16,7 @@ import VerCliente from './components/verCliente';
 import CrearGastos from './components/crearGastos';
 import GastosDelMes from './components/gastosMes';
 import Estadisticas from './components/estadisticas';
+import BuscadorGastos from './components/buscadorGastos';
 const App = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -109,7 +110,10 @@ const App = () => {
           path="/sistema/estadisticas"
           element={isAuthenticated ? <Estadisticas /> : <Navigate to="/" />}
         />
-
+         <Route
+          path="/sistema/filtroGastos"
+          element={isAuthenticated ? <BuscadorGastos /> : <Navigate to="/" />}
+        />
         <Route path="/mi-perfil/:id" element={<MiPerfil />} />
       </Routes> 
     </main>

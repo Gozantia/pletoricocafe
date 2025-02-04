@@ -14,7 +14,8 @@ function EditarCliente() {
     const [pagarVisible, setPagarVisible] = useState(false);
     const [medioPago, setMedioPago] = useState('');
     const [pagoCon, setPagoCon] = useState(0);
-
+    const [montoEfectivo,setMontoEfectivo] = useState(0);
+    const [montoTransferencia,setMontoTransferencia] = useState(0);
     // Consultar la información de la mesa y sus productos
     useEffect(() => {
         const fetchProductos = async () => {
@@ -88,10 +89,16 @@ function EditarCliente() {
             MedioPago: medioPago
         };
 
+        if (medioPago === 'transfecash') {
+            mesaActualizada.monto_efectivo = montoEfectivo;
+            mesaActualizada.monto_transferencia = montoTransferencia;
+        }
+
         try {
             setLoading(true);
             await axios.put(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${mesaInfo.id}`, mesaActualizada);
             navigate('/sistema/mesas-pagadas');
+            console.log("Enviando mesaActualizada:", mesaActualizada);
         } catch (err) {
             console.error('Error al actualizar la mesa', err);
             setError('No se pudo realizar el pago');
@@ -150,7 +157,15 @@ function EditarCliente() {
                                 />
                                 Transferencia
                             </label>
-
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="transfecash"
+                                    checked={medioPago === 'transfecash'}
+                                    onChange={(e) => setMedioPago(e.target.value)}
+                                />
+                                Transfe y efectivo
+                            </label>
                             {/* Mostrar campo "pagoCon" si el medio de pago es efectivo */}
                             {medioPago === 'efectivo' && (
                                 <div>
@@ -180,6 +195,20 @@ function EditarCliente() {
                                     )}
                                 </div>
                             )}
+
+                        {medioPago === 'transfecash' && ( 
+                            <div> <label>
+                                Parte en efectivo
+                                <input type="number" placeholder="Monto en efectivo" value={montoEfectivo} onChange={(e) => setMontoEfectivo(Number(e.target.value))} />
+                                </label>
+                                 
+                                <label>
+                                Parte en tranferencia
+                                <input type="number" placeholder="Monto en transferencia" value={montoTransferencia} onChange={(e) => setMontoTransferencia(Number(e.target.value))} />
+                               
+                                </label>
+                            </div>
+                         )}
                               <h4 className='valor_total'>Total: ${calcularTotalAcumulado()}</h4>
                             <button onClick={manejarPago} disabled={loading} className='button-listo'>Listo</button>
                         </div>

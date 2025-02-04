@@ -48,7 +48,7 @@ const GastosDia = () => {
             <h1>Egresos registrados</h1>
             <ul className='clientes-activos gastos'>
                 {gastosDia.map((gasto) => (
-                    <li key={gasto.id}>
+                    <li key={gasto.id} id={gasto.id}  >
                         <h3>{gasto.descripcion}</h3>
                         <span>{gasto.valor}</span>
                     </li>
