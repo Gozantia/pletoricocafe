@@ -18,12 +18,19 @@ function CrearCliente() {
     const [medioPago, setMedioPago] = useState('');
     const [pagarVisible, setPagarVisible] = useState(false);
     const [pagoCon, setPagoCon] = useState(0);
-    const { setIdDelDiaDeTrabajo } = useDiaTrabajo();
-   
-
+    const { idDelDiaDeTrabajo } = useDiaTrabajo();
+    const [montoEfectivo,setMontoEfectivo] = useState(0);
+    const [montoTransferencia,setMontoTransferencia] = useState(0);
+    const diaId = idDelDiaDeTrabajo;
 
     // Función para manejar la creación de una nueva mesa
     const handleCreateMesa = async (e) => {
+        
+        if (!diaId) {
+            setError('No hay un día de trabajo activo.');
+            return; // Exit the function early
+        }
+
         e.preventDefault();
         setLoading(true);
         setError(null);
@@ -42,22 +49,6 @@ function CrearCliente() {
             return;
         }
     
-        try {
-            // Verificar si hay un día de trabajo activo
-            const diaResponse = await axios.get('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo');
-            let diaId;
-    
-            // Manejar respuesta en función del código de estado
-            if (diaResponse.status === 200) {
-                // Día de trabajo activo encontrado
-                diaId = diaResponse.data.data.dia_id;
-   
-            } else if (diaResponse.status === 201) {
-                // Se creó un nuevo día de trabajo
-                diaId = diaResponse.data.data.dia_id;
-                console.log("Se creó un nuevo día de trabajo:", diaId);
-            }
-    
             // Crear el objeto para la nueva mesa
             const newMesa = {
                 Nombre: nombre,
@@ -65,7 +56,7 @@ function CrearCliente() {
                 Productos: productosSeleccionados,
                 DiaTrabajoId: diaId
             };
-    
+            try {
             // Hacer la solicitud POST a la API
             const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
             const newMesaId = response.data.cliente_id;
@@ -80,8 +71,6 @@ function CrearCliente() {
             console.log("Respuesta de la actualización del día de trabajo:", addVentaToDiaResponse.data);
             console.log("La mesa se creó en este día:", diaId);
     
-            // Volver a la lista de clientes activos
-            setIdDelDiaDeTrabajo(diaId);
             navigate(`/sistema/`);
         } catch (err) {
             console.error('Error al crear mesa', err);
@@ -125,6 +114,12 @@ function CrearCliente() {
 
     // Función para manejar "Guardar y Pagar"
     const handleGuardarYPagar = () => {
+
+        if (!diaId) {
+            setError('No hay un día de trabajo activo.');
+            return; // Exit the function early
+        }
+
           // Validación: No permitir guardar si no hay productos seleccionados
           if (productosSeleccionados.length === 0) {
             setError('Debe seleccionar al menos un producto antes de guardar.');
@@ -157,45 +152,45 @@ function CrearCliente() {
             return;
         }
 
-        
-        try {
-            setLoading(true);
-            // Verificar si hay un día de trabajo activo
-            const diaResponse = await axios.get('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo');
-            let diaId;
 
-            // Si no hay un día activo, crear uno
-            if (diaResponse.status === 404) {
-                const nuevoDiaResponse = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo');
-                diaId = nuevoDiaResponse.data.data.dia_id; // ID del nuevo día de trabajo
-                console.log("se creó un nuevo día",diaId)
-            } else {
-                diaId = diaResponse.data.data.dia_id;
-                console.log("entró en este día",diaId) // ID del día de trabajo activo
-            }
+            setLoading(true);
 
             const newMesa = {
                 Nombre: nombre,
                 Estado: 'Pagado',
                 Productos: productosSeleccionados,
-                TotalVenta: totalAcumulado,
                 MedioPago: medioPago,
-                DiaTrabajoId : diaId 
+                DiaTrabajoId : diaId                
             };
-     
+
+            
+            if (medioPago === 'transfecash') {
+                
+                newMesa.TotalVenta = montoEfectivo + montoTransferencia; 
+                newMesa.monto_efectivo = montoEfectivo; 
+                newMesa.monto_transferencia = montoTransferencia; 
+            } else {
+                
+                newMesa.TotalVenta =totalAcumulado; 
+            }
+
+            // Debugging: Log the newMesa object
+            console.log('Datos enviados al backend:', newMesa);
+        
+
+            try {
             // Hacer la solicitud POST a la API
             const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', newMesa);
             const newMesaId = response.data.cliente_id;
             console.log("id nueva mesa",newMesaId)
 
             // Actualizar el día de trabajo con el ID de la nueva mesa
-           const addVentatoDiaResponse = await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', {
+           await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', {
                 dia_id: diaId,   // El ID del día de trabajo actual
                 mesa_id: newMesaId,
                 abierto: true   // El ID de la mesa recién creada
               
             });
-            setIdDelDiaDeTrabajo(diaId);
             navigate('/sistema/mesas-pagadas');
         } catch (err) {
             console.error('Error al realizar el pago:', err);
@@ -285,6 +280,15 @@ function CrearCliente() {
                                 />
                                 Transferencia
                             </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="transfecash"
+                                    checked={medioPago === 'transfecash'}
+                                    onChange={(e) => setMedioPago(e.target.value)}
+                                />
+                                Transfe y efectivo
+                            </label>
 
                             {/* Mostrar campo "Pago con" si el medio de pago es efectivo */}
                             {medioPago === 'efectivo' && (
@@ -315,6 +319,21 @@ function CrearCliente() {
                                     )}
                                 </div>
                             )}
+
+                            {medioPago === 'transfecash' && ( 
+                            <div> <label>
+                                Parte en efectivo
+                                <input type="number" placeholder="Monto en efectivo" value={montoEfectivo} onChange={(e) => setMontoEfectivo(Number(e.target.value))} />
+                                </label>
+                                 
+                                <label>
+                                Parte en tranferencia
+                                <input type="number" placeholder="Monto en transferencia" value={montoTransferencia} onChange={(e) => setMontoTransferencia(Number(e.target.value))} />
+                               
+                                </label>
+                            </div>
+                            )}
+
                              <h4 className='valor_total'>Total: ${calcularTotalAcumulado()}</h4>
                             <button onClick={manejarPago} disabled={loading} className='button-listo'>Listo</button>
                         </div>
