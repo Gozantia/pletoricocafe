@@ -5,6 +5,7 @@ const DiaTrabajoContext = createContext();
 
 export const DiaTrabajoProvider = ({ children }) => {
     const [idDelDiaDeTrabajo, setIdDelDiaDeTrabajo] = useState(null);
+    const [actualizarGastos, setActualizarGastos] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -23,8 +24,13 @@ export const DiaTrabajoProvider = ({ children }) => {
         fetchDiaDeTrabajo();
     }, []);
 
+    const forzarActualizacionGastos = () => {
+        setActualizarGastos(prev => !prev);
+    };
+
+
     return (
-        <DiaTrabajoContext.Provider value={{ idDelDiaDeTrabajo, setIdDelDiaDeTrabajo, loading }}>
+        <DiaTrabajoContext.Provider value={{ idDelDiaDeTrabajo, setIdDelDiaDeTrabajo, loading, actualizarGastos, forzarActualizacionGastos  }}>
             {children}
         </DiaTrabajoContext.Provider>
     );

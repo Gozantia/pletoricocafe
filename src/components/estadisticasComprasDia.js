@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useDiaTrabajo } from '../DiaTrabajoContext'; // Importar el contexto
 
 const EstadisticasGastosDia = () => {
-    const { idDelDiaDeTrabajo } = useDiaTrabajo(); // Obtener el ID del contexto
+    const { idDelDiaDeTrabajo, actualizarGastos } = useDiaTrabajo(); // Obtener el ID del contexto
     const [resultado, setResultado] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ const EstadisticasGastosDia = () => {
         };
 
         obtenerTotales();
-    }, [idDelDiaDeTrabajo]); // Dependencia del ID del día de trabajo
+    }, [idDelDiaDeTrabajo, actualizarGastos]); // Dependencia del ID del día de trabajo
 
     if (!idDelDiaDeTrabajo) {
         return <p>Esperando el ID del día de trabajo...</p>;
@@ -57,7 +57,7 @@ const EstadisticasGastosDia = () => {
 
     return (
         <div className='stats-box'>
-            <h3>Hoy:</h3>
+            <h3>Egresos hoy:</h3>
             {resultado ? (
                 <>
                     <span><strong>Trans:</strong> ${resultado.gastos_transferencia.toLocaleString('es-ES')}</span>

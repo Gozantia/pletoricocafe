@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
 import EstadisticasVentasDia from './estadisticasVentasDia';
+import EstadisticasGastosDia from './estadisticasComprasDia';
 
 const ClientesPagadosDia = () => { 
     const { idDelDiaDeTrabajo, setIdDelDiaDeTrabajo } = useDiaTrabajo();
@@ -85,6 +86,8 @@ const ClientesPagadosDia = () => {
 
     return (
         <section className='container'>
+            <EstadisticasGastosDia/>
+            
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <h1>Clientes Pagados</h1>
         

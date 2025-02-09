@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
+import EstadisticasGastosDia from './estadisticasComprasDia';
 /* import { useNavigate } from 'react-router-dom'; */
 
 const GastosDia = () => { 
-    const { idDelDiaDeTrabajo } = useDiaTrabajo();
+    const { idDelDiaDeTrabajo, forzarActualizacionGastos } = useDiaTrabajo();
     const [gastosDia, setGastosDia] = useState([]);
     const [error, setError] = useState(null);
     const [nuevosGastos, setNuevosGastos] = useState([]);
@@ -101,7 +102,7 @@ const GastosDia = () => {
             setTimeout(() => {
                 setMensajeExito(null);
             }, 3000);
-            
+            forzarActualizacionGastos();
         } catch (error) {
             console.error('Error:', error);
             alert(error.message || 'Error al procesar la solicitud.');
@@ -112,6 +113,7 @@ const GastosDia = () => {
 
     return (
         <section>
+            <EstadisticasGastosDia/>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {mensajeExito && <p style={{ color: 'green' }}>{mensajeExito}</p>}
             <div className='egresos-heading-block'>
