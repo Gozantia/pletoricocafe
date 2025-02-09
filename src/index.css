@@ -523,3 +523,17 @@ tr.ventas-bajas {
   padding: 10px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+
+.egresos-heading-block {
+
+  display: flex;
+  gap: 10px;
+  margin: 10px 0; 
+}
+.egresos-heading-block h1 {
+  margin: 0;
+  padding: 0;
+}
+button:disabled {
+  background: #929292;
+}

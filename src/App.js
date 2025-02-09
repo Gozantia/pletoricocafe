@@ -13,11 +13,11 @@ import ClientesPagadosDia from './components/clientes-pagados-dia';
 import ClientesActivos from './components/clientes-activos';
 import EditarCliente from './components/editarCliente';
 import VerCliente from './components/verCliente';
-import CrearGastos from './components/crearGastos';
 import GastosDelMes from './components/gastosMes';
 import Estadisticas from './components/estadisticas';
 import BuscadorGastos from './components/buscadorGastos';
 import EditarGasto from './components/editarGasto';
+import GastosDia from './components/gastos-dia';
 
 const App = () => {
 
@@ -77,7 +77,7 @@ const App = () => {
         />
           <Route
           path="/sistema/egresos"
-          element={isAuthenticated ? <CrearGastos /> : <Navigate to="/" />}
+          element={isAuthenticated ? <GastosDia /> : <Navigate to="/" />}
         />
         <Route
           path="/sistema/mesas-pagadas"

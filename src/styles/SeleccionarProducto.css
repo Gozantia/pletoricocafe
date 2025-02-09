@@ -111,3 +111,12 @@
 .tabla__prod-precio {
   width: 70px;
 }
+
+.gastos-table input[type="text"], .gastos-table input[type="number"], .gastos-table select {
+  width: 100%;
+}
+
+
+.gastos-table .tabla__prod-cantidad {
+  width: 40px;
+ }
