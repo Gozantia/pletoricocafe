@@ -17,6 +17,8 @@ import CrearGastos from './components/crearGastos';
 import GastosDelMes from './components/gastosMes';
 import Estadisticas from './components/estadisticas';
 import BuscadorGastos from './components/buscadorGastos';
+import EditarGasto from './components/editarGasto';
+
 const App = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -102,6 +104,12 @@ const App = () => {
           path="/sistema/ventas-mes-actual"
           element={isAuthenticated ? <VentasMes /> : <Navigate to="/" />}
         />
+
+        <Route
+          path="/sistema/editar-gasto/:id"
+          element={isAuthenticated ? <EditarGasto /> : <Navigate to="/" />}
+        />
+
         <Route
           path="/sistema/gastos-mes-actual"
           element={isAuthenticated ? <GastosDelMes /> : <Navigate to="/" />}

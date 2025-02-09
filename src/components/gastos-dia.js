@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
+import { useNavigate } from 'react-router-dom';
 
 const GastosDia = () => { 
     const { idDelDiaDeTrabajo } = useDiaTrabajo();
     const [gastosDia, setGastosDia] = useState([]);
     const [error, setError] = useState(null);
-    
+     const navigate = useNavigate();
 
     // Función memoizada para cargar las Gastos existentes
     const fetchGastos = useCallback(async () => {
@@ -14,7 +15,7 @@ const GastosDia = () => {
         try {
             const response = await axios.get(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo/${idDelDiaDeTrabajo}/gastos`);
             setGastosDia(response.data);
-            console.log( "este es el id del día de los gastos", idDelDiaDeTrabajo, "y esto es lo que esta encontrando", response.data )
+           
         } catch (err) {
             console.error('Error al obtener los egresos', err);
             setError('Aún no hemos comprado una mondá');
@@ -48,7 +49,7 @@ const GastosDia = () => {
             <h1>Egresos registrados</h1>
             <ul className='clientes-activos gastos'>
                 {gastosDia.map((gasto) => (
-                    <li key={gasto.id} id={gasto.id}  >
+                    <li key={gasto.id} onClick={() => navigate(`/sistema/editar-gasto/${gasto.id}`)}  >
                         <h3>{gasto.descripcion}</h3>
                         <span>{gasto.valor}</span>
                     </li>
