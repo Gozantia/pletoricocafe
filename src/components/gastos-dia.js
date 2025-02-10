@@ -11,6 +11,8 @@ const GastosDia = () => {
     const [nuevosGastos, setNuevosGastos] = useState([]);
     const [mensajeExito, setMensajeExito] = useState('');
     const [loading, setLoading] = useState(false);
+    const [editMode, setEditMode] = useState(null);
+    const [editedGasto, setEditedGasto] = useState({});
     /* const navigate = useNavigate(); */
 
     // Función memoizada para cargar las Gastos existentes
@@ -111,8 +113,113 @@ const GastosDia = () => {
         }
     };
 
+    const handleEditClick = (gasto) => {
+        setEditMode(gasto.id);
+        setEditedGasto({ ...gasto });
+      };
+    
+      const handleEditInputChange = (e, field) => {
+        setEditedGasto({ ...editedGasto, [field]: e.target.value });
+      };
+
+      
+
+
+      const editGasto = async () => {
+        setLoading(true);
+        setError(null);
+    
+        try {
+          const gastoActualizado = {
+            id: editedGasto.id,
+            dia_trabajo: idDelDiaDeTrabajo,
+          };
+    
+          if (editedGasto.valor !== gastosDia.find(g => g.id === editedGasto.id).valor) {
+            gastoActualizado.valor = editedGasto.valor;
+          }
+          if (editedGasto.descripcion !== gastosDia.find(g => g.id === editedGasto.id).descripcion) {
+            gastoActualizado.descripcion = editedGasto.descripcion;
+          }
+          if (editedGasto.medio !== gastosDia.find(g => g.id === editedGasto.id).medio) {
+            gastoActualizado.medio = editedGasto.medio;
+          }
+          if (editedGasto.tipo !== gastosDia.find(g => g.id === editedGasto.id).tipo) {
+            gastoActualizado.tipo = editedGasto.tipo;
+          }
+    
+          console.log("Datos enviados en PUT:", gastoActualizado);
+    
+          const response = await axios.put(
+            `https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/gastos/${editedGasto.id}`,
+            gastoActualizado
+          );
+    
+          console.log("Respuesta de la API:", response.data);
+          setMensajeExito("✅ Gasto actualizado correctamente.");
+          setTimeout(() => {
+            setMensajeExito(null);
+          }, 3000);
+          setEditMode(null);
+          fetchGastos();
+          forzarActualizacionGastos();
+        } catch (err) {
+          console.error("Error al actualizar el gasto", err);
+          setError("No se pudo actualizar el gasto");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      
+      const handleRemoveNewGasto = (index) => {
+        const updatedGastos = [...nuevosGastos];
+        updatedGastos.splice(index, 1);
+        setNuevosGastos(updatedGastos);
+    };
+
+      // Función que se activa al hacer clic en "Eliminar"
+        const handleDeleteClick = (gasto) => {
+            deleteGasto(gasto);
+        };
+
+        
+        // Función para eliminar el gasto
+  const deleteGasto = async (deletedGasto) => {
+   
+    const gastoToDelete = {
+      id: deletedGasto.id,
+      dia_trabajo: idDelDiaDeTrabajo,
+    };
+
+    // Confirmación antes de eliminar
+    const isConfirmed = window.confirm("¿Estás seguro de eliminar este gasto?");
+    if (!isConfirmed) return;
+
+    try {
+      setLoading(true);
+
+      await axios.delete(
+        `https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/gastos/${deletedGasto.id}`,
+        { data: gastoToDelete } // Axios requiere que el body vaya dentro de "data" en DELETE
+      );
+
+      setMensajeExito("¡Gasto eliminado correctamente!");
+      setTimeout(() => setMensajeExito(null), 3000);
+      fetchGastos();
+      forzarActualizacionGastos(); // Refrescar la lista de gastos si es necesario
+    } catch (err) {
+      console.error("Error al eliminar el gasto", err);
+      setError("No se pudo eliminar el gasto");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
     return (
-        <section>
+        <section className='container'>
             <EstadisticasGastosDia/>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {mensajeExito && <p style={{ color: 'green' }}>{mensajeExito}</p>}
@@ -126,7 +233,7 @@ const GastosDia = () => {
             <div className="table-container">
             <table className='products-table gastos-table'>
                 <thead>
-                    <tr>
+                    <tr><th></th>
                         <th>Descripción</th>
                         <th>Valor</th>
                         <th>Cantidad</th>
@@ -139,6 +246,7 @@ const GastosDia = () => {
                  {/* Filas para los nuevos gastos */}
                  {nuevosGastos.map((gasto, index) => (
                             <tr key={`nuevo-${index}`}>
+                                <td> <button onClick={() => handleRemoveNewGasto(index)}> X </button></td>
                                 <td className='tabla__prod-nombre'>
                                     <input type="text"
                                     value={gasto.descripcion}
@@ -184,11 +292,70 @@ const GastosDia = () => {
 
                  {gastosDia.map((gasto, index) => (
                    <tr key={index}>
+                     {editMode === gasto.id ? (
+                        <>
+                        <td className='tabla__prod-precio'>
+                        <button onClick={editGasto} disabled={loading}>
+                            {loading ? "Guardando..." : "Guardar"}
+                        </button>    
+                        </td>
+                          <td  className='tabla__prod-nombre' >
+                          <input
+                                type="text"
+                                value={editedGasto.descripcion}
+                                onChange={(e) => handleEditInputChange(e, "descripcion")}
+                            />  
+                          </td> 
+                          <td  className='tabla__prod-precio' >
+                          <input
+                                type="text"
+                                value={editedGasto.valor}
+                                onChange={(e) => handleEditInputChange(e, "valor")}
+                            />  
+                          </td>
+                          <td>
+                          <input
+                                type="number"
+                                value={editedGasto.cantidad}
+                                onChange={(e) => handleEditInputChange(e, "cantidad")}
+                           />
+                          </td>  
+                         <td>
+                                 <select
+                                    value={editedGasto.tipo} 
+                                    onChange={(e) => handleEditInputChange(e, "tipo")}
+                                >
+                                    <option value="Insumo">insumo</option>
+                                    <option value="Costo fijo">costo fijo</option>
+                                    <option value="Trabajador">trabajador</option>
+                                    <option value="Extra">extra</option>
+                                    <option value="Aseo">aseo</option>
+                                    <option value="Vacuna">vacuna</option>
+                                 </select>
+                         </td>
+                         <td>
+                                <select
+                                    value={editedGasto.medio} 
+                                    onChange={(e) => handleEditInputChange(e, "medio")}
+                                >
+                                    <option value="efectivo" defaultValue>efectivo</option>
+                                    <option value="transferencia">transferencia</option>
+                                </select>
+                         </td>
+                        </>
+                    ) : (
+                    <>
+                     <td className='tabla__prod-precio'> 
+                     <button onClick={() => handleEditClick(gasto)}>Editar</button>
+                     <button onClick={() => handleDeleteClick(gasto)}>Eliminar</button>
+                     </td>
                     <td  className='tabla__prod-nombre' >{gasto.descripcion}</td>
                     <td  className='tabla__prod-precio' >{gasto.valor}</td>
                     <td  className='tabla__prod-cantidad' >{gasto.cantidad}</td>
                     <td  className='tabla__prod-precio' >{gasto.tipo}</td>
                     <td  className='tabla__prod-precio' >{gasto.medio}</td>
+                    </>
+                )}
                  </tr>
                   ))}   
                 </tbody>

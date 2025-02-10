@@ -57,7 +57,7 @@ const EstadisticasGastosDia = () => {
 
     return (
         <div className='stats-box'>
-            <h3>Egresos hoy:</h3>
+            <h3>Egresos</h3>
             {resultado ? (
                 <>
                     <span><strong>Trans:</strong> ${resultado.gastos_transferencia.toLocaleString('es-ES')}</span>

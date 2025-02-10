@@ -50,12 +50,12 @@ const EstadisticasVentasDia = ( { setEstadisticasVentas }) => {
     }, [fetchVentas, idDelDiaDeTrabajo]);
 
     return (
-        <div>
-            <h1>Estadísticas de Ventas del Día</h1>
+        <div className='stats-box'>
+            <h3>Ventas</h3>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <p><strong>Efectivo:</strong> ${ventasEfectivo}</p>
-            <p><strong>Transferencias:</strong> ${ventasTransferencia}</p>
-            <p><strong>Total:</strong> ${ventasEfectivo + ventasTransferencia}</p>
+            <span><strong>Trans:</strong> ${ventasTransferencia.toLocaleString('es-ES')}</span>
+            <span><strong>Cash:</strong> ${ventasEfectivo.toLocaleString('es-ES')}</span>
+            <span><strong>Total:</strong> ${ventasEfectivo + ventasTransferencia}</span>
         </div>
     );
 };

@@ -86,16 +86,12 @@ const ClientesPagadosDia = () => {
 
     return (
         <section className='container'>
+            <h1>Hoy</h1>
             <EstadisticasGastosDia/>
-            
+            <EstadisticasVentasDia setEstadisticasVentas={setEstadisticasVentas} />
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <h1>Clientes Pagados</h1>
-        
+            <h2>Clientes pagados</h2>
             <ul className='clientes-activos'>
-
-                <li className='estadisticas_dia'>
-                    <EstadisticasVentasDia setEstadisticasVentas={setEstadisticasVentas} />
-                </li>
                 {mesas.map((mesa) => (
                     <li onClick={() => navigate(`/sistema/ver-cliente/${mesa.id}`)} key={mesa.id}>
                         <h3>{mesa.Nombre}</h3>
