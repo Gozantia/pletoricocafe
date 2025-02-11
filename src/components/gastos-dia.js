@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
 import EstadisticasGastosDia from './estadisticasComprasDia';
+import { FaPlus, FaTrash, FaCopy, FaSave, FaEdit, FaWindowClose } from "react-icons/fa";
+
 /* import { useNavigate } from 'react-router-dom'; */
 
 const GastosDia = () => { 
@@ -217,6 +219,19 @@ const GastosDia = () => {
   };
 
 
+  const handleCopyClick = (gasto) => {
+    const nuevoGasto = {
+    id: Date.now(), // ID temporal solo para la UI
+    descripcion: gasto.descripcion,
+    valor: gasto.valor,
+    cantidad: gasto.cantidad,
+    tipo: gasto.tipo,
+    medio: gasto.medio
+    };
+ setNuevosGastos([...nuevosGastos, nuevoGasto]);
+};
+
+
 
     return (
         <section className='container'>
@@ -225,20 +240,21 @@ const GastosDia = () => {
             {mensajeExito && <p style={{ color: 'green' }}>{mensajeExito}</p>}
             <div className='egresos-heading-block'>
             <h1>Egresos hoy </h1> 
-            <button onClick={agregarFilaNuevoGasto}>+</button>
+            <button onClick={agregarFilaNuevoGasto}><FaPlus/></button>
             <button onClick={guardarGastos} disabled={!nuevosGastos.length || loading}>
-                    {loading ? 'Guardando...' : 'Guardar'}
+                    <FaSave /> 
             </button>
             </div>
             <div className="table-container">
             <table className='products-table gastos-table'>
                 <thead>
-                    <tr><th></th>
+                    <tr>
                         <th>Descripción</th>
                         <th>Valor</th>
                         <th>Cantidad</th>
                         <th>Tipo</th>
                         <th>Medio</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -246,7 +262,7 @@ const GastosDia = () => {
                  {/* Filas para los nuevos gastos */}
                  {nuevosGastos.map((gasto, index) => (
                             <tr key={`nuevo-${index}`}>
-                                <td> <button onClick={() => handleRemoveNewGasto(index)}> X </button></td>
+                               
                                 <td className='tabla__prod-nombre'>
                                     <input type="text"
                                     value={gasto.descripcion}
@@ -287,6 +303,10 @@ const GastosDia = () => {
                                 </select>
                                     
                                 </td>
+                                <td className=' item-actions'>
+                                     <button onClick={() => handleRemoveNewGasto(index)}> <FaWindowClose /> </button>
+                                     <button onClick={() => handleCopyClick(gasto)}><FaCopy/></button> 
+                                     </td>
                             </tr>
                  ))}
 
@@ -294,11 +314,7 @@ const GastosDia = () => {
                    <tr key={index}>
                      {editMode === gasto.id ? (
                         <>
-                        <td className='tabla__prod-precio'>
-                        <button onClick={editGasto} disabled={loading}>
-                            {loading ? "Guardando..." : "Guardar"}
-                        </button>    
-                        </td>
+                        
                           <td  className='tabla__prod-nombre' >
                           <input
                                 type="text"
@@ -342,24 +358,33 @@ const GastosDia = () => {
                                     <option value="transferencia">transferencia</option>
                                 </select>
                          </td>
+                         <td className=' item-actions'>
+                        <button onClick={editGasto} disabled={loading}>
+                            {loading ? "Guardando..." : "Guardar"}
+                        </button>    
+                        </td>
+
                         </>
                     ) : (
                     <>
-                     <td className='tabla__prod-precio'> 
-                     <button onClick={() => handleEditClick(gasto)}>Editar</button>
-                     <button onClick={() => handleDeleteClick(gasto)}>Eliminar</button>
-                     </td>
+                     
                     <td  className='tabla__prod-nombre' >{gasto.descripcion}</td>
                     <td  className='tabla__prod-precio' >{gasto.valor}</td>
                     <td  className='tabla__prod-cantidad' >{gasto.cantidad}</td>
                     <td  className='tabla__prod-precio' >{gasto.tipo}</td>
                     <td  className='tabla__prod-precio' >{gasto.medio}</td>
+                    <td className=' item-actions'> 
+                     <button onClick={() => handleEditClick(gasto)}><FaEdit/></button>
+                     <button onClick={() => handleCopyClick(gasto)}><FaCopy/></button> 
+                     <button onClick={() => handleDeleteClick(gasto)}><FaTrash/></button>
+                     </td>
                     </>
                 )}
                  </tr>
                   ))}   
                 </tbody>
                 
+
             </table>
             </div>     
            

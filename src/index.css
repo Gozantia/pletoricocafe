@@ -537,3 +537,15 @@ tr.ventas-bajas {
 button:disabled {
   background: #929292;
 }
+.item-actions button {
+  margin: 0 2px;
+  border-radius: 6px;
+  padding: 9px;
+  display: flex;
+}
+
+td.item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 107px;
+}
