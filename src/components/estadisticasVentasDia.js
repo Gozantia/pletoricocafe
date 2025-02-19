@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useDiaTrabajo } from '../DiaTrabajoContext';
 
 const EstadisticasVentasDia = ( { setEstadisticasVentas }) => {
-    const { idDelDiaDeTrabajo } = useDiaTrabajo();
+    const { idDelDiaDeTrabajo, actualizarVentas } = useDiaTrabajo();
     const [ventasEfectivo, setVentasEfectivo] = useState(0);
     const [ventasTransferencia, setVentasTransferencia] = useState(0);
     const [error, setError] = useState(null);
@@ -32,7 +32,7 @@ const EstadisticasVentasDia = ( { setEstadisticasVentas }) => {
         if (idDelDiaDeTrabajo) {
             fetchVentas();
         }
-    }, [idDelDiaDeTrabajo, fetchVentas]);
+    }, [idDelDiaDeTrabajo, fetchVentas, actualizarVentas]);
 
     // Actualiza las ventas cuando el usuario vuelve a la pestaña de la aplicación
     useEffect(() => {

@@ -18,6 +18,7 @@ import Estadisticas from './components/estadisticas';
 import BuscadorGastos from './components/buscadorGastos';
 import EditarGasto from './components/editarGasto';
 import GastosDia from './components/gastos-dia';
+import Clientes from './components/clientes';
 
 const App = () => {
 
@@ -74,6 +75,10 @@ const App = () => {
         <Route
           path="/sistema/crear-cliente"
           element={isAuthenticated ? <CrearCliente /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/sistema/clientes"
+          element={isAuthenticated ? <Clientes /> : <Navigate to="/" />}
         />
           <Route
           path="/sistema/egresos"
