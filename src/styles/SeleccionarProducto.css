@@ -136,3 +136,15 @@
 }
 
 
+ .tabla__prod-items ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 100px;
+  max-height: 76px;
+  overflow: auto;
+}
+.popup_actions-content  .products-table {
+  max-height: 250px;
+  overflow: auto;
+}

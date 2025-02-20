@@ -524,7 +524,7 @@ useEffect(() => {
                         <ul  onClick={() => abrirProdModal(mesa)} >
                             {mesa.Productos.map((prod, index) => (
                             <li key={index}>
-                                {prod.nombre} (x{prod.cantidad}) - ${prod.precio}
+                               {prod.cantidad} {prod.nombre}
                             </li>
                             ))}
                             
