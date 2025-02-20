@@ -431,7 +431,8 @@ useEffect(() => {
                 {crearMesa ? <FaWindowClose /> : <FaPlus />}
             </button>
             </div>
-            <table className='products-table gastos-table'>
+            <div className="table-container">
+            <table className='products-table ventas-table'>
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -614,6 +615,7 @@ useEffect(() => {
                     ))}
                 </tbody>
             </table>
+            </div>
             <div className='actions'>
                 <button onClick={handleOpenPopup}>Cerrar día</button>
             </div>
@@ -625,7 +627,8 @@ useEffect(() => {
             </div>   
             <div className= {`popup-actions ${productPopUp ? "active" : ""}`}>
                 <div className="popup_actions-content">
-                <h3>{modoEdicion && mesaSeleccionada?.Nombre ? `Orden de ${mesaSeleccionada?.Nombre}` : "Seleccionar Productos"}</h3>
+                <h3>   {modoEdicion && mesaSeleccionada?.Nombre ? `Orden de ${mesaSeleccionada?.Nombre}` : "Seleccionar Productos"} ${calcularValor(productosSeleccionados)}</h3>
+               
                     <input 
                     type="text" 
                     placeholder="Buscar producto..." 
@@ -643,12 +646,10 @@ useEffect(() => {
                  </ul>
                     )}
                 
-                    <h4>Productos seleccionados:</h4>
                    <TablaProductos
                     productos={productosSeleccionados}
                     setProductos={setProductosSeleccionados}
                     />
-
                     <button
                     onClick={modoEdicion ? editarCliente : guardarProductos}
                     >

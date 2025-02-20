@@ -94,14 +94,20 @@
   margin-bottom: 10px;
 }
 
-.tabla__prod-nombre {
-  width: 90px;
+.tabla__prod-nombre input {
+  width: 120px;
+  font-size: 1.2rem;
+  transition: all 0.3s ease-in-out;
+}
+.tabla__prod-nombre:focus {
+  width: 200px;
   font-size: 1.2rem;
 }
 .tabla__prod-cantidad {
-  width: 120px;
-  font-size: 1.2rem;
-  font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
 }
 .products-table button:last-child {
   margin-right: 0;
@@ -120,3 +126,13 @@
 .gastos-table .tabla__prod-cantidad {
   width: 40px;
  }
+ .tabla__prod-nombre {
+  
+ }
+ .popup_actions-content td.tabla__prod-cantidad button {
+  font-size: 14px;
+  padding: 4px 5px;
+  display: flex;
+}
+
+

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { FaPlus, FaTrash, FaMinus } from "react-icons/fa";
 function TablaProductos({ productos, setProductos }) {
     // Validación adicional para asegurarse de que `productos` no sea undefined o null
     if (!productos) {
@@ -38,13 +38,6 @@ function TablaProductos({ productos, setProductos }) {
         });
     };
 
-    // Función para calcular el total acumulado
-    const calcularTotalAcumulado = () => {
-        return productos.reduce((total, producto) => {
-            return total + producto.cantidad * producto.precio;
-        }, 0).toFixed(0); // Convertir a número con dos decimales
-    };
-
     // Función para eliminar un producto de la lista
     const eliminarProducto = (id) => {
         setProductos((prevProductos) => {
@@ -72,25 +65,21 @@ function TablaProductos({ productos, setProductos }) {
                             <tr key={producto.id}> {/* Asegúrate de usar `producto.id` como key */}
                                 <td className='tabla__prod-nombre'>{producto.nombre}</td>
                                 <td className='tabla__prod-cantidad'>
-                                    {/* Botón para decrementar la cantidad, visible solo si la cantidad > 1 */}
-                                    {producto.cantidad > 1 && (
-                                        <button type="button" onClick={() => disminuirCantidad(producto.id)}>-</button>
-                                    )}
+                                  
                                     {producto.cantidad}
                                     {/* Botón para incrementar la cantidad */}
-                                    <button type="button" onClick={() => aumentarCantidad(producto.id)}> + </button>
+                                    <button type="button" onClick={() => aumentarCantidad(producto.id)}> <FaPlus/> </button>
                                     {/* Botón para eliminar el producto de la tabla */}
-                                    <button onClick={() => eliminarProducto(producto.id)}> X </button>
+                                      {/* Botón para decrementar la cantidad, visible solo si la cantidad > 1 */}
+                                      {producto.cantidad > 1 && (
+                                        <button type="button" onClick={() => disminuirCantidad(producto.id)}><FaMinus /></button>
+                                    )}
+                                    <button onClick={() => eliminarProducto(producto.id)}> <FaTrash/>  </button>
                                 </td>
                                 <td className='tabla__prod-precio'>${producto.precio}</td>
                                 <td>${(producto.cantidad * producto.precio).toFixed(0)}</td>
                             </tr>
                         ))}
-                        {/* Fila para el total acumulado */}
-                        <tr>
-                            <td colSpan="1" style={{ textAlign: 'right' }}><strong>Total</strong></td>
-                            <td colSpan="3"><h3 className="total_tabla">${calcularTotalAcumulado()} </h3></td>
-                        </tr>
                     </tbody>
                 </table>
             ) : (
