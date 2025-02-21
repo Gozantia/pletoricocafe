@@ -96,12 +96,11 @@
 
 .tabla__prod-nombre input {
   width: 120px;
-  font-size: 1.2rem;
+  font-size:  1.5rem;
   transition: all 0.3s ease-in-out;
 }
-.tabla__prod-nombre:focus {
+.tabla__prod-nombre input:focus {
   width: 200px;
-  font-size: 1.2rem;
 }
 .tabla__prod-cantidad {
     font-size: 1.1rem;
