@@ -50,7 +50,8 @@ const Clientes = () => {
     const [modoEdicion, setModoEdicion] = useState(false); 
     const listaRef = useRef(null);
     const [editMode, setEditMode] = useState(null);
-
+    const [mostrarSugerencias, setMostrarSugerencias] = useState(null); 
+    const [sugerencias, setSugerencias] = useState([]);
 
     // Función memoizada para cargar las mesas existentes
     const fetchMesas = useCallback(async () => {
@@ -349,8 +350,6 @@ useEffect(() => {
      
       };
 
-       // Función para calcular el total acumulado
-  
 
     const editarCliente = async () => {
         if (!mesaSeleccionada) {
@@ -416,6 +415,38 @@ useEffect(() => {
         }
     }, [modoEdicion, mesaSeleccionada]);
 
+    const obtenerSugerencias = async (prefix = "") => {
+        try {
+          const url = `https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/sugerencias${prefix ? `?prefix=${prefix}` : ""}`;
+          const response = await fetch(url);
+          const data = await response.json();
+          console.log("Sugerencias:", data.sugerencias);
+          setSugerencias(data.sugerencias)
+        } catch (error) {
+          console.error("Error obteniendo sugerencias:", error);
+        }
+      };
+      
+      // Llamar sin prefijo cuando el input recibe foco (mostrar los nombres más frecuentes)
+      const handleFocusSuggesions = () => {
+        obtenerSugerencias();
+      };
+      
+      // Llamar con prefijo a medida que se escribe
+      const handleChangeSuggesions = (value) => {
+        if (!value) {
+            setMostrarSugerencias(sugerencias); // Si el input está vacío, mostrar todas las sugerencias
+            return;
+        }
+    
+        // Filtrar las sugerencias que coincidan con el prefijo ingresado
+        const filtradas = sugerencias.filter((nombre) =>
+            nombre.toLowerCase().startsWith(value.toLowerCase())
+        );
+    
+        setMostrarSugerencias(filtradas);
+    };
+      
 
 
     return (
@@ -449,11 +480,23 @@ useEffect(() => {
                     <>
                     <tr>
                         <td className='tabla__prod-nombre'>
-                         <input type="text"
-                               value={nuevaMesa.Nombre}
-                               onChange={(e) => handleInputNewMesa( 'Nombre', e.target.value)}
-                         />
-                         </td>
+                        <input 
+                                type="text"
+                                value={nuevaMesa.Nombre}
+                                onFocus={handleFocusSuggesions}  // Llama la API al hacer clic en el input
+                                onChange={(e) => {
+                                    handleInputNewMesa('Nombre', e.target.value); // Mantiene la funcionalidad existente
+                                    handleChangeSuggesions(e.target.value); // Filtra sugerencias en tiempo real
+                                }}
+                            />
+                                {Array.isArray(mostrarSugerencias) && sugerencias.length > 0 && (
+                                <div className='suggestions-list'>
+                                    {sugerencias.map((nom, index) => (
+                                        <span key={index}>{nom}</span>
+                                    ))}
+                                </div>
+                            )}
+                            </td>
                           <td className='tabla__prod-nombre'>
                               {nuevaMesa.Productos.length === 0 ? (
                                  <button onClick={() => abrirProdModal()} >Productos</button>
