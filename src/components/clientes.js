@@ -287,7 +287,7 @@ useEffect(() => {
         
        try {
         // Hacer la solicitud POST a la API
-         const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', datosAEnviar);
+         const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/sugerencias', datosAEnviar);
          const newMesaId = response.data.cliente_id;
          console.log("ID de la nueva mesa recién creada:", newMesaId);
         
