@@ -429,8 +429,10 @@ useEffect(() => {
       
       // Llamar sin prefijo cuando el input recibe foco (mostrar los nombres más frecuentes)
       const handleFocusSuggesions = () => {
-        obtenerSugerencias();
-      };
+        if (!nuevaMesa.Nombre) { // Solo llama a la API si el input está vacío
+            obtenerSugerencias();
+        }
+    };
       
       // Llamar con prefijo a medida que se escribe
       const handleChangeSuggesions = (value) => {
@@ -447,8 +449,13 @@ useEffect(() => {
         setMostrarSugerencias(filtradas);
     };
       
-
-
+    const handleSeleccionarSugerencia = (nombreSeleccionado) => {
+        handleInputNewMesa('Nombre', nombreSeleccionado); // Asigna el nombre seleccionado al input
+        setSugerencias([]); // Oculta las sugerencias después de seleccionar una
+    };
+    const handleOcultarSugerencias = () => {
+        setTimeout(() => setSugerencias([]), 200); // Pequeño delay para permitir clic en sugerencia
+    };
     return (
         <section className='container'>
             <h1>Hoy</h1>
@@ -488,14 +495,12 @@ useEffect(() => {
                                     handleInputNewMesa('Nombre', e.target.value); // Mantiene la funcionalidad existente
                                     handleChangeSuggesions(e.target.value); // Filtra sugerencias en tiempo real
                                 }}
-                            />
-                                { sugerencias.length > 0 && (
-                                <div className='suggestions-list'>
-                                    {sugerencias.map((nom, index) => (
-                                        <span key={index}>{nom}</span>
-                                    ))}
-                                </div>
-                            )}
+                                onBlur={handleOcultarSugerencias}
+                          />
+
+                           
+
+                               
                             </td>
                           <td className='tabla__prod-nombre'>
                               {nuevaMesa.Productos.length === 0 ? (
@@ -707,6 +712,16 @@ useEffect(() => {
                 </div>
             </div>
         
+            { sugerencias.length > 0 && (
+                  <div className='suggestions-list'>
+                        {sugerencias.map((nom, index) => (
+                         <span key={index}
+                        onClick={() => handleSeleccionarSugerencia(nom)}                  
+                        >{nom}</span>
+                     ))}
+                 </div>
+             )} 
+
         </section>
     );
 };

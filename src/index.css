@@ -565,3 +565,15 @@ td.item-actions {
   flex-wrap: wrap;
   min-width: 107px;
 }
+
+.suggestions-list  {
+  position: fixed;
+  display: grid;
+  top: 30px;
+  right: 40%;
+  background: #fff;
+}
+.suggestions-list span {
+  padding:10px;
+  cursor: pointer;
+}
