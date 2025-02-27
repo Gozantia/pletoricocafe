@@ -65,7 +65,6 @@ function TablaProductos({ productos, setProductos }) {
                             <tr key={producto.id}> {/* Asegúrate de usar `producto.id` como key */}
                                 <td className='tabla__prod-nombre'>{producto.nombre}</td>
                                 <td className='tabla__prod-cantidad'>
-                                  
                                     {producto.cantidad}
                                     {/* Botón para incrementar la cantidad */}
                                     <button type="button" onClick={() => aumentarCantidad(producto.id)}> <FaPlus/> </button>

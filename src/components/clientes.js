@@ -287,7 +287,7 @@ useEffect(() => {
         
        try {
         // Hacer la solicitud POST a la API
-         const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/sugerencias', datosAEnviar);
+         const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas', datosAEnviar);
          const newMesaId = response.data.cliente_id;
          console.log("ID de la nueva mesa recién creada:", newMesaId);
         
@@ -417,15 +417,19 @@ useEffect(() => {
 
     const obtenerSugerencias = async (prefix = "") => {
         try {
-          const url = `https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/sugerencias${prefix ? `?prefix=${prefix}` : ""}`;
-          const response = await fetch(url);
-          const data = await response.json();
-          console.log("Sugerencias:", data.sugerencias);
-          setSugerencias(data.sugerencias)
+            console.log("🔍 Prefijo enviado a la API:", prefix); // Debugging
+    
+            const url = `https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/sugerencias${prefix ? `?prefix=${prefix}` : ""}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            console.log("📌 Sugerencias recibidas:", data.sugerencias); // Debugging
+    
+            setSugerencias([...data.sugerencias]); // Forzar re-render
         } catch (error) {
-          console.error("Error obteniendo sugerencias:", error);
+            console.error("⚠️ Error obteniendo sugerencias:", error);
         }
-      };
+    };  
       
       // Llamar sin prefijo cuando el input recibe foco (mostrar los nombres más frecuentes)
       const handleFocusSuggesions = () => {
@@ -434,19 +438,15 @@ useEffect(() => {
         }
     };
       
-      // Llamar con prefijo a medida que se escribe
-      const handleChangeSuggesions = (value) => {
+    const handleChangeSuggesions = (value) => {
+        console.log("🖊 Input cambiado:", value); // Verificar si se ejecuta al escribir
+    
         if (!value) {
-            setMostrarSugerencias(sugerencias); // Si el input está vacío, mostrar todas las sugerencias
+            setSugerencias([]); // Si el input está vacío, ocultar sugerencias
             return;
         }
     
-        // Filtrar las sugerencias que coincidan con el prefijo ingresado
-        const filtradas = sugerencias.filter((nombre) =>
-            nombre.toLowerCase().startsWith(value.toLowerCase())
-        );
-    
-        setMostrarSugerencias(filtradas);
+        obtenerSugerencias(value);
     };
       
     const handleSeleccionarSugerencia = (nombreSeleccionado) => {
@@ -456,6 +456,7 @@ useEffect(() => {
     const handleOcultarSugerencias = () => {
         setTimeout(() => setSugerencias([]), 200); // Pequeño delay para permitir clic en sugerencia
     };
+
     return (
         <section className='container'>
             <h1>Hoy</h1>
@@ -492,15 +493,21 @@ useEffect(() => {
                                 value={nuevaMesa.Nombre}
                                 onFocus={handleFocusSuggesions}  // Llama la API al hacer clic en el input
                                 onChange={(e) => {
+                                    console.log("🎯 Evento onChange ejecutado", e.target.value); // Debugging
                                     handleInputNewMesa('Nombre', e.target.value); // Mantiene la funcionalidad existente
                                     handleChangeSuggesions(e.target.value); // Filtra sugerencias en tiempo real
                                 }}
                                 onBlur={handleOcultarSugerencias}
                           />
-
-                           
-
-                               
+                         { sugerencias && (
+                            <div className='suggestions-list'>
+                                    {sugerencias.map((nom, index) => (
+                                    <span key={index}
+                                    onClick={() => handleSeleccionarSugerencia(nom)}                  
+                                    >{nom}</span>
+                                ))}
+                            </div>
+                        )}     
                             </td>
                           <td className='tabla__prod-nombre'>
                               {nuevaMesa.Productos.length === 0 ? (
@@ -712,15 +719,7 @@ useEffect(() => {
                 </div>
             </div>
         
-            { sugerencias.length > 0 && (
-                  <div className='suggestions-list'>
-                        {sugerencias.map((nom, index) => (
-                         <span key={index}
-                        onClick={() => handleSeleccionarSugerencia(nom)}                  
-                        >{nom}</span>
-                     ))}
-                 </div>
-             )} 
+           
 
         </section>
     );
