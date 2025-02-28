@@ -527,6 +527,7 @@ useEffect(() => {
                     <>
                     <tr>
                         <td className='tabla__prod-nombre'>
+                        <span>Hello world</span>
                         <input 
                                 type="text"
                                 value={nuevaMesa.Nombre}
