@@ -404,6 +404,34 @@ useEffect(() => {
         }
     };
 
+    const eliminarCliente = async () => {
+        if (!mesaSeleccionada) {
+            setError("No hay una cliente para eliminar.");
+            return;
+        }
+        setLoading(true);
+        setError(null);
+        try {
+            await axios.delete(`https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/${mesaSeleccionada.id}`);
+            setEditMode(null);
+            cerrarProdModal();
+            setMensajeExito("✅ Éxito: Cliente eliminado");
+            setProductosSeleccionados([]);
+            setProductosFiltrados([]);
+            setProductos([]);
+            setTimeout(() => {
+                setMensajeExito(null);
+            }, 3000);
+    
+            // Actualizar lista o hacer alguna acción después de eliminar
+        } catch (err) {
+            console.error('Error al eliminar la mesa', err);
+            setError('No se pudo eliminar la mesa');
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     useEffect(() => {
         if (modoEdicion && mesaSeleccionada) {
@@ -525,7 +553,7 @@ useEffect(() => {
                                     
                                  ))
                                  }
-                                  <li  onClick={() => abrirProdModal()}> <FaPlus /> </li>
+                                  <li  onClick={() => abrirProdModal()}> <FaEdit /> </li>
                                 </ul>
                                 </>
                                 )}      
@@ -570,7 +598,7 @@ useEffect(() => {
                           <button
                           onClick={guardarCliente}
                           disabled={!nuevaMesa.Nombre.trim() || nuevaMesa.Productos.length === 0}>
-                          {loading ? "Guardando..." : "Guardar"}
+                          {loading ? "Guardando..." : <><FaSave/> Guardar</>}
                           </button>
                         </td>
                         </tr>
@@ -643,10 +671,13 @@ useEffect(() => {
                                             }
                                         }}
                                     >
-                               Guardar
+                               <FaSave/>
                            </button>
                            <button  onClick={() => setEditMode(false)}>
-                             Cancelar
+                                <FaWindowClose />
+                           </button>
+                           <button >
+                                <FaTrash />
                            </button>
                            </>
                             )}
@@ -722,7 +753,12 @@ useEffect(() => {
                 </div>
             </div>
         
-           
+            <div className={`popup-actions popup-eliminar ${actionPopup ? "active" : ""}`}>
+                <div className='popup_actions-content'>
+                <h3>Borrar este cliente</h3>
+                <button>  Si </button> <button> Cancelar </button>
+                </div>
+            </div> 
 
         </section>
     );

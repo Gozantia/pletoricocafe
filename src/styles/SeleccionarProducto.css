@@ -112,6 +112,10 @@
   margin-right: 0;
   background: #913a07;
 }
+.products-table button:disabled {
+  background: #929292 !important;
+}
+
 
 .tabla__prod-precio {
   width: 70px;
@@ -125,9 +129,7 @@
 .gastos-table .tabla__prod-cantidad {
   width: 40px;
  }
- .tabla__prod-nombre {
-  
- }
+
  .popup_actions-content td.tabla__prod-cantidad button {
   font-size: 14px;
   padding: 4px 5px;

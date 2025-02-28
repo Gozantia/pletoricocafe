@@ -96,15 +96,14 @@ th {
 
 .products-table button {
   margin: auto 6px;
-    border-radius: 50%;
     font-weight: 700;
     font-size: 14px;
     padding: 6px 10px;
+    display: flex ;
+    align-items: center; 
+    gap: 6px;
 }
-.products-table button:last-child {
-  margin-right: 0;
-  background: #913a07;
-}
+
 
 .nombres_sugerencias {
   display:flex;
@@ -418,6 +417,7 @@ tr.ventas-bajas {
     margin: 0 auto;
     justify-content: center;
     align-content: flex-start;
+    width: -webkit-fill-available;
 }
 .popup-actions .lista-prods li {
   font-size: 1rem;
@@ -595,9 +595,7 @@ tr.ventas-bajas {
   margin: 0;
   padding: 0;
 }
-button:disabled {
-  background: #929292;
-}
+
 .item-actions button {
   margin: 0 2px;
   border-radius: 6px;
