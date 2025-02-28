@@ -65,6 +65,7 @@ function TablaProductos({ productos, setProductos }) {
                             <tr key={producto.id}> {/* Asegúrate de usar `producto.id` como key */}
                                 <td className='tabla__prod-nombre'>{producto.nombre}</td>
                                 <td className='tabla__prod-cantidad'>
+                                    <div className='tabla__prod-cantidad--actions' >
                                     {producto.cantidad}
                                     {/* Botón para incrementar la cantidad */}
                                     <button type="button" onClick={() => aumentarCantidad(producto.id)}> <FaPlus/> </button>
@@ -74,6 +75,7 @@ function TablaProductos({ productos, setProductos }) {
                                         <button type="button" onClick={() => disminuirCantidad(producto.id)}><FaMinus /></button>
                                     )}
                                     <button onClick={() => eliminarProducto(producto.id)}> <FaTrash/>  </button>
+                                </div>
                                 </td>
                                 <td className='tabla__prod-precio'>${producto.precio}</td>
                                 <td>${(producto.cantidad * producto.precio).toFixed(0)}</td>
