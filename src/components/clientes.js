@@ -122,7 +122,6 @@ const Clientes = () => {
             handlecerrarDia();
             setActionPopup(false);
           };
-
           const handleOpenTrashPopup = (mesa) => {
             console.log("debuging the function")
             setMesaSeleccionada(mesa); // Guarda la mesa que será eliminada
