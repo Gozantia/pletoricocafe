@@ -40,8 +40,10 @@ const Clientes = () => {
         total: 0,
     });
     const [actionPopup, setActionPopup] = useState(false);
+    const [trashPopup, setTrashPopup] = useState(false);
     const [mensajeExito, setMensajeExito] = useState('');
     const [productPopUp, setProductPopUp] = useState(false);
+    
     const [mostrarLista, setMostrarLista] = useState(false); 
     const [filtro, setFiltro] = useState('');
     const [productos, setProductos] = useState([]);
@@ -121,6 +123,18 @@ const Clientes = () => {
             setActionPopup(false);
           };
 
+          const handleOpenTrashPopup = (mesa) => {
+            setMesaSeleccionada(mesa); // Guarda la mesa que será eliminada
+            setTrashPopup(true);
+        };
+
+        const handleCloseTrashPopup = () => setTrashPopup(false);
+            
+        const handleTrashConfirm = () => {
+            eliminarCliente();
+            setTrashPopup(false);
+          };
+
     const formatearHora = (fecha) => {
                 return fecha.split(" ")[1].slice(0, 5); // Obtiene solo "12:33"
     };
@@ -136,8 +150,6 @@ const Clientes = () => {
         setCrearMesa(prev => !prev);
     };
 
-
-   
 
     const handleInputNewMesa = (campo, valor) => {
         setNuevaMesa(prev => ({
@@ -422,7 +434,8 @@ useEffect(() => {
             setTimeout(() => {
                 setMensajeExito(null);
             }, 3000);
-    
+            fetchMesas();
+            forzarActualizacionVentas();
             // Actualizar lista o hacer alguna acción después de eliminar
         } catch (err) {
             console.error('Error al eliminar la mesa', err);
@@ -453,9 +466,6 @@ useEffect(() => {
             const url = `https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/sugerencias${prefix ? `?prefix=${prefix}` : ""}`;
             const response = await fetch(url);
             const data = await response.json();
-            
-            console.log("📌 Sugerencias recibidas:", data.sugerencias); // Debugging
-    
             setSugerencias([...data.sugerencias]); // Forzar re-render
         } catch (error) {
             console.error("⚠️ Error obteniendo sugerencias:", error);
@@ -676,7 +686,7 @@ useEffect(() => {
                            <button  onClick={() => setEditMode(false)}>
                                 <FaWindowClose />
                            </button>
-                           <button >
+                           <button onClick={() => handleOpenTrashPopup(mesa)} >
                                 <FaTrash />
                            </button>
                            </>
@@ -753,10 +763,10 @@ useEffect(() => {
                 </div>
             </div>
         
-            <div className={`popup-actions popup-eliminar ${actionPopup ? "active" : ""}`}>
+            <div className={`popup-actions popup-eliminar ${trashPopup ? "active" : ""}`}>
                 <div className='popup_actions-content'>
                 <h3>Borrar este cliente</h3>
-                <button>  Si </button> <button> Cancelar </button>
+                <button onClick={()=> handleTrashConfirm()}>  Borrar </button> <button onClick={() => handleCloseTrashPopup()}> Cancelar </button>
                 </div>
             </div> 
 
