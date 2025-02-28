@@ -417,6 +417,7 @@ tr.ventas-bajas {
     min-width: 225px;
     margin: 0 auto;
     justify-content: center;
+    align-content: flex-start;
 }
 .popup-actions .lista-prods li {
   font-size: 1rem;
@@ -435,10 +436,11 @@ tr.ventas-bajas {
 }
 
 .popup-actions .table-container {
-  max-width: 217px;
+  max-width: 260px;
+  max-height: 209px;
 }
 .popup-actions .tabla__prod-nombre {
-  width: 83px;
+  width: 66px;
 }
 .tabla__prod-cantidad--actions {
   display: flex;
@@ -615,8 +617,13 @@ td.item-actions {
   top: 30px;
   right: 40%;
   background: #fff;
+  z-index: 2;
 }
 .suggestions-list span {
   padding:10px;
   cursor: pointer;
+}
+.popup-products-modal {
+  align-items: start;
+  padding-top: 58px;
 }

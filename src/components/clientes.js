@@ -153,7 +153,7 @@ const Clientes = () => {
    /* console.log("mesaSeleccionada.Productos", mesa?.Productos); */
    const mesaConProductos = mesa ? mesa : { 
     Nombre: '',
-    Productos: [],
+    Productos: nuevaMesa.Productos,
     Estado: 'Activo',
     TotalVenta: 0,
     MedioPago: '',
@@ -409,11 +409,14 @@ useEffect(() => {
         if (modoEdicion && mesaSeleccionada) {
             // Cuando estamos en modo edición, se actualizan los productos seleccionados
             setProductosSeleccionados(mesaSeleccionada.Productos);
+        } else if (!modoEdicion && nuevaMesa) {
+            // Cuando estamos creando una nueva mesa, usar los productos actuales de nuevaMesa
+            setProductosSeleccionados(nuevaMesa.Productos);
         } else {
             // Si no estamos en modo edición, se puede limpiar o poner los productos por defecto
             setProductosSeleccionados([]);
         }
-    }, [modoEdicion, mesaSeleccionada]);
+    }, [modoEdicion, mesaSeleccionada, nuevaMesa]);
 
     const obtenerSugerencias = async (prefix = "") => {
         try {
@@ -640,7 +643,7 @@ useEffect(() => {
                                             }
                                         }}
                                     >
-                               Actualizar mesa
+                               Guardar
                            </button>
                            <button  onClick={() => setEditMode(false)}>
                              Cancelar
@@ -680,9 +683,9 @@ useEffect(() => {
                 <button onClick={handleConfirm}>  Si</button> <button onClick={handleClosePopup}> Cancelar </button>
                 </div>
             </div>   
-            <div className= {`popup-actions ${productPopUp ? "active" : ""}`}>
+            <div className= {`popup-actions popup-products-modal ${productPopUp ? "active" : ""}`}>
                 <div className="popup_actions-content">
-                <h3>   {modoEdicion && mesaSeleccionada?.Nombre ? `Orden de ${mesaSeleccionada?.Nombre}` : "Seleccionar Productos"} ${calcularValor(productosSeleccionados)}</h3>
+                <h3>   {modoEdicion && mesaSeleccionada?.Nombre ? `Orden de ${mesaSeleccionada?.Nombre}` : "Orden nueva"} ${calcularValor(productosSeleccionados)}</h3>
                
                     <input 
                     type="text" 
