@@ -86,6 +86,7 @@
 .table-container {
   overflow-x: auto; /* Permite el scroll horizontal */
   width: 100%; /* Asegura que el contenedor no se desborde */
+  margin-bottom: 50px;
 }
 
 .products-table {
@@ -105,8 +106,16 @@
 .tabla__prod-cantidad {
     font-size: 1.1rem;
     font-weight: 700;
-    display: flex;
-    align-items: center;
+}
+.gastos-table .tabla__prod-cantidad input {
+  width: 40px;
+}
+.gastos-table .tabla__prod-precio input {
+  width: 90px;
+  font-size: 1.1rem;
+}
+.gastos-table select {
+  font-size: 1.1rem;
 }
 .products-table button:last-child {
   margin-right: 0;
@@ -120,15 +129,6 @@
 .tabla__prod-precio {
   width: 70px;
 }
-
-.gastos-table input[type="text"], .gastos-table input[type="number"], .gastos-table select {
-  width: 100%;
-}
-
-
-.gastos-table .tabla__prod-cantidad {
-  width: 40px;
- }
 
  .popup_actions-content td.tabla__prod-cantidad button {
   font-size: 14px;
@@ -148,4 +148,9 @@
 .popup_actions-content  .products-table {
   max-height: 250px;
   overflow: auto;
+}
+
+.table-container.breakwidth {
+  overflow-x: visible !important; /* Quita el scroll mientras sugerencias está activo */
+  white-space: nowrap; /* Evita que se rompa el contenido */
 }

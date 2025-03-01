@@ -28,10 +28,9 @@ const Header = ({ isAuthenticated, userId, role, setIsAuthenticated, setRole, se
       <ul className='mainNav'>
       {isAuthenticated && ( 
       <>
-           <li className='nuevo_cliente'> <Link to={`/sistema/crear-cliente`}>  + </Link></li>
-           
-           <li><Link to="/sistema/mesas-pagadas">Pagados</Link></li>
-      
+        <li className='nuevo_cliente'> <Link to={`/sistema`}>  Clientes </Link></li>
+        <li><Link to="/sistema/egresos"> Egresos</Link></li>
+         <li><Link to="/sistema/estadisticas">Estadisticas</Link></li>
        </>
       )}
        </ul>
@@ -42,10 +41,10 @@ const Header = ({ isAuthenticated, userId, role, setIsAuthenticated, setRole, se
             <ul>
            
             {userId && <li><Link to={`/mi-perfil/${userId}`}>Mi Perfil</Link></li>}
+            {role === 'manager' && <li><Link to="/estadisticas">Estadisticas</Link></li>}
             {role === 'manager' && <li><Link to="/crea-usuario">Crear Usuario</Link></li>}
-            
             {role === 'manager' && <li><Link to="/sistema/ventas-mes">Ventas mes actual</Link></li>}
-            {role === 'manager' && <li><Link to={`/sistema/clientes-activos/${idDelDiaDeTrabajo}`}>Activos</Link></li>}
+        
 
             <li><button onClick={handleLogout}>Salir</button></li>
             </ul>

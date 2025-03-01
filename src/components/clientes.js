@@ -7,7 +7,7 @@ import EstadisticasGastosDia from './estadisticasComprasDia';
 import { FaPlus, FaTrash, FaCopy, FaSave, FaEdit, FaWindowClose } from "react-icons/fa";
 import TablaProductos from './tablaProductosCopy';
 
-const Clientes = () => { 
+const Clientes = ({role}) => { 
     const { idDelDiaDeTrabajo, setIdDelDiaDeTrabajo, forzarActualizacionVentas } = useDiaTrabajo();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -294,12 +294,11 @@ useEffect(() => {
                 Object.entries(datosAEnviar).filter(([_, valor]) => valor !== '' && valor !== null && valor !== undefined)
             );
             console.log("nombre del cliente nuevo", datosAEnviar.Nombre);
-        
+            console.log("Enviando datos:", datosAEnviar);
        try {
         // Hacer la solicitud POST a la API
          const response = await axios.post('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/mesas/sugerencias', datosAEnviar);
          const newMesaId = response.data.cliente_id;
-         console.log("ID de la nueva mesa recién creada:", newMesaId);
         
         // Actualizar el día de trabajo con el ID de la nueva mesa
          await axios.put('https://ddf7uggy3c.execute-api.us-east-2.amazonaws.com/mesas/dia-trabajo', {
@@ -495,21 +494,21 @@ useEffect(() => {
     const handleOcultarSugerencias = () => {
         setTimeout(() => setSugerencias([]), 200); // Pequeño delay para permitir clic en sugerencia
     };
-
+   
     return (
         <section className='container'>
-            <h1>Hoy</h1>
+            
             <EstadisticasGastosDia/>
             <EstadisticasVentasDia setEstadisticasVentas={setEstadisticasVentas} />
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {mensajeExito && <p style={{ color: 'green' }}>{mensajeExito}</p>}
             <div className='egresos-heading-block'>
-            <h2>Clientes </h2>
+            <h1>Clientes Hoy</h1>
             <button onClick={toggleCrearMesa}>
                 {crearMesa ? <FaWindowClose /> : <FaPlus />}
             </button>
-            </div>
-            <div className="table-container">
+            </div> 
+            <div className={`table-container ${sugerencias.length > 0 ? "breakwidth": ""}`}>
             <table className='products-table ventas-table'>
                 <thead>
                     <tr>
@@ -527,7 +526,7 @@ useEffect(() => {
                     <>
                     <tr>
                         <td className='tabla__prod-nombre'>
-                        <span>Hello world</span>
+                        
                         <input 
                                 type="text"
                                 value={nuevaMesa.Nombre}
@@ -622,13 +621,13 @@ useEffect(() => {
                                {prod.cantidad} {prod.nombre}
                             </li>
                             ))}
-                            
+                           
                         </ul>
                         </td>
                         <td  className='tabla__prod-cantidad' >${calcularValor(mesa.Productos)}</td>
                         <td  className='tabla__prod-precio' >     
                             {editMode === mesa.id ? (
-                                    <div className="edit-estate">
+                               <div className="edit-estate">
                                   <select
                                    value= "Pagado"
                                    onChange={(e) => handleEditInputChange(e, "Estado")}
@@ -655,12 +654,11 @@ useEffect(() => {
                                     <input type="number" placeholder="Monto en transferencia" value={mesaSeleccionada?.monto_transferencia || 0 } onChange={(e) => handleEditInputChange( e, 'monto_transferencia')} />
                                     </label>  
                                   </> 
-                                  )}
-                               
+                                  )} 
                        </div>
-                        ): 
+                        ) : 
                         <div onClick={() => handleEditClick(mesa)}> {mesa.Estado}</div>   
-                         }
+                     }
                         </td>
                         <td  className='tabla__prod-precio' >{formatearHora(mesa.FechaCreacion)}</td>
                         <td className=' item-actions'>
@@ -680,21 +678,24 @@ useEffect(() => {
                                             }
                                         }}
                                     >
-                               <FaSave/>
+                               <FaSave/> Guardar
                            </button>
                            <button  onClick={() => setEditMode(false)}>
-                                <FaWindowClose />
+                                <FaWindowClose /> Cancelar
                            </button>
                            <button onClick={() => handleOpenTrashPopup(mesa)} >
-                                <FaTrash />
+                                <FaTrash /> Eliminar
                            </button>
                            </>
                             )}
                         </td>
                      </tr>
                     ))}
+                    <tr>
+                        <td colSpan="6" className='row-sepatator'></td>
+                    </tr>
                     {mesasPagadas.map((mesa, index) => (
-                    <tr key={index} className="clietes_pagados">
+                    <tr key={index} className="clientes_pagados">
                         <td  className='tabla__prod-nombre' >{mesa.Nombre}</td>
                         <td  className='tabla__prod-items' > 
                         <ul>
@@ -704,11 +705,88 @@ useEffect(() => {
                             </li>
                             ))}
                         </ul>
+                        {editMode === mesa.id && (
+                                <button  onClick={() => abrirProdModal(mesa)}> <FaEdit /> Editar </button>    
+                            )
+                        }    
                         </td>
                         <td  className='tabla__prod-cantidad' > {mesa.TotalVenta} </td>
-                        <td  className='tabla__prod-precio' > {mesa.Estado} {mesa.MedioPago} </td>
+                        <td  className='tabla__prod-precio' >
+                         {editMode === mesa.id ? (
+                            <>
+                            <div className="edit-estate">
+                                  <select
+                                   value= "Pagado"
+                                   onChange={(e) => handleEditInputChange(e, "Estado")}
+                                  >
+                                   <option value="Pagado"> Pagado </option>
+                                   <option value="Activo"> Activo </option>
+                                  </select>
+                                  <select
+                                   value={mesaSeleccionada?.MedioPago || "efectivo"}
+                                   onChange={(e) => handleEditInputChange(e, "MedioPago")}
+                                  >
+                                   <option value="efectivo"> efectivo </option>
+                                   <option value="transferencia"> transferencia </option>
+                                   <option value="transfecash"> transfecash </option>
+                                  </select>
+                                  {mesaSeleccionada?.MedioPago === "transfecash" && (
+                                   <>
+                                   <label>
+                                    Parte en efectivo
+                                    <input type="number" placeholder="Monto en efectivo" value={mesaSeleccionada?.monto_efectivo || 0} onChange={(e) => handleEditInputChange( e, 'monto_efectivo')} />
+                                  </label>
+                                  <label>
+                                    Parte en Transferencia
+                                    <input type="number" placeholder="Monto en transferencia" value={mesaSeleccionada?.monto_transferencia || 0 } onChange={(e) => handleEditInputChange( e, 'monto_transferencia')} />
+                                    </label>  
+                                  </> 
+                                  )} 
+                            </div>
+                            </>
+                        ) :
+                        <div className='edit-estate' onClick={role === 'manager' ? () => handleEditClick(mesa) : undefined}>
+                        
+                        {mesa.Estado} 
+                        <div className={`mediopago-tag tag_${mesa.MedioPago.toLowerCase()}`}>
+                            {mesa.MedioPago}
+                        </div>
+                        
+                        </div>
+                    }    
+                         </td>
                         <td  className='tabla__prod-precio' > {formatearHora(mesa.FechaCreacion)}</td>
-                        <td className=' item-actions'> </td>
+                        <td className=' item-actions'>
+                                
+                                {editMode === mesa.id && (
+                                <>
+                                <button id= {mesa.id}
+                                        onClick={() => {
+                                            // Asegurarse de que mesaSeleccionada tenga los últimos datos
+                                            if (mesaSeleccionada) {
+                                                setMesaSeleccionada((prevMesa) => ({
+                                                    ...prevMesa,
+                                                    Productos: productosSeleccionados, // Sincronizar productos
+                                                }));
+                                                editarCliente();
+                                            } else {
+                                                setError("No hay una mesa seleccionada para editar.");
+                                            }
+                                        }}
+                                            >
+                                    <FaSave/> Guardar
+                                </button>
+                                <button onClick={() => handleOpenTrashPopup(mesa)} >
+                                    <FaTrash /> Eliminar
+                                </button>        
+                                <button  onClick={() => setEditMode(false)}>
+                                <FaWindowClose /> Cancelar
+                               </button>
+                            </>
+                         )}
+                           
+
+                         </td>
                      </tr>
                     ))}
                 </tbody>

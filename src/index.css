@@ -255,7 +255,7 @@ li.nuevo_cliente a {
 .login-container div button, button {
   padding: 10px;
   width: 100%; /* Botón toma el ancho completo del formulario */
-  background-color: #ff5e00; /* Color de fondo del botón */
+  background-color: #ef7206; /* Color de fondo del botón */
   color: #fff; /* Color del texto en el botón */
   border: none;
   border-radius: 5px;
@@ -264,7 +264,7 @@ li.nuevo_cliente a {
 }
 
 .login-container div button:hover, button:hover {
-  background-color: #b94806; /* Color del botón al hacer hover */
+  background-color: #df6800; /* Color del botón al hacer hover */
 }
 
 .login-container p {
@@ -286,6 +286,8 @@ li.nuevo_cliente a {
 button, input {
   width: auto;
 }
+
+
 .actions button, .actions > div {
   margin: 0 5px;
   flex-grow: 1;
@@ -453,7 +455,6 @@ tr.ventas-bajas {
   text-align: center;
 }
 .ventas-table .tabla__prod-nombre {
-
   position: relative;
 }
 .container_egresos-form {
@@ -563,7 +564,7 @@ tr.ventas-bajas {
   gap:15px;
   margin: 10px auto;
   justify-content: center;
-  border-bottom: 1px solid #ff5e00;
+  border-bottom: 1px solid #ffb112;
 }
 .stats-box h3 {
   min-width: 90px;
@@ -607,21 +608,54 @@ td.item-actions {
   display: flex;
   flex-wrap: wrap;
   min-width: 107px;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+  width: max-content;
 }
 
 .suggestions-list  {
   position: absolute;
   display: grid;
-  top: 30px;
+  top: -200px;
   right: 40%;
   background: #fff;
-  z-index: 2;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+  padding: 10px;
 }
 .suggestions-list span {
   padding:10px;
   cursor: pointer;
+  font-size: 1.1rem;
 }
 .popup-products-modal {
   align-items: start;
   padding-top: 58px;
+}
+.edit-estate {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.edit-estate select {
+  font-size: 1.1rem;
+}
+
+.mediopago-tag {
+  padding:  5px 10px;
+  color: #fff;
+  border-radius: 5px;
+  width: fit-content;
+}
+
+.tag_transferencia {
+  background:#1d0a63;
+}
+.tag_efectivo {
+  background:#288b06;
+}
+.row-sepatator {
+
+  height: 20px;
 }

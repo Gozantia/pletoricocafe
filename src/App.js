@@ -69,7 +69,7 @@ const App = () => {
           element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to="/sistema" />}
         />
         <Route
-          path="/sistema"
+          path="/sistema/clientes-old"
           element={isAuthenticated ? <ClientesActivos /> : <Navigate to="/" />}
         />
         <Route
@@ -77,8 +77,8 @@ const App = () => {
           element={isAuthenticated ? <CrearCliente /> : <Navigate to="/" />}
         />
         <Route
-          path="/sistema/clientes"
-          element={isAuthenticated ? <Clientes /> : <Navigate to="/" />}
+          path="/sistema/"
+          element={isAuthenticated ? <Clientes role={role} /> : <Navigate to="/" />}
         />
           <Route
           path="/sistema/egresos"

@@ -304,8 +304,8 @@ const GastosDia = () => {
                                     
                                 </td>
                                 <td className=' item-actions'>
-                                     <button onClick={() => handleRemoveNewGasto(index)}> <FaWindowClose /> </button>
-                                     <button onClick={() => handleCopyClick(gasto)}><FaCopy/></button> 
+                                     <button onClick={() => handleRemoveNewGasto(index)}> <FaWindowClose /> Cancelar </button>
+                                     <button onClick={() => handleCopyClick(gasto)}><FaCopy/> Copiar </button> 
                                      </td>
                             </tr>
                  ))}
@@ -374,10 +374,10 @@ const GastosDia = () => {
                     <td  className='tabla__prod-precio' >{gasto.tipo}</td>
                     <td  className='tabla__prod-precio' >{gasto.medio}</td>
                     <td className=' item-actions'> 
-                     <button onClick={() => handleEditClick(gasto)}><FaEdit/></button>
-                     <button onClick={() => handleCopyClick(gasto)}><FaCopy/></button> 
-                     <button onClick={() => handleDeleteClick(gasto)}><FaTrash/></button>
-                     </td>
+                     <button onClick={() => handleEditClick(gasto)}><FaEdit/>Editar</button>
+                     <button onClick={() => handleCopyClick(gasto)}><FaCopy/>Copiar</button> 
+                     <button onClick={() => handleDeleteClick(gasto)}><FaTrash/>Eliminar</button>
+                     </td>  
                     </>
                 )}
                  </tr>
