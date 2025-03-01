@@ -236,7 +236,9 @@ const agregarProducto = (producto) => {
         setMesaSeleccionada({
             ...mesaSeleccionada,
             Productos: productosActualizados
-        }); 
+        });
+        setMostrarLista(false);
+        setFiltro('');  
     } else {
 
     setProductosSeleccionados(prev => [
