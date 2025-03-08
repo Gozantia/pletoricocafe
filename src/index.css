@@ -457,6 +457,12 @@ tr.ventas-bajas {
 .ventas-table .tabla__prod-nombre {
   position: relative;
 }
+.ventas-table .tabla__prod-nombre h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+}
+
 .container_egresos-form {
   display: flex;
   gap: 5px 10px;
@@ -617,8 +623,9 @@ td.item-actions {
 .suggestions-list  {
   position: absolute;
   display: grid;
-  top: -200px;
-  right: 40%;
+  grid-template-columns: 1fr 1fr;
+  top: -100px;
+  left: 80%;
   background: #fff;
   z-index: 1000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
@@ -639,7 +646,7 @@ td.item-actions {
   gap: 10px;
 }
 .edit-estate select {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
 }
 
 .mediopago-tag {
@@ -655,7 +662,14 @@ td.item-actions {
 .tag_efectivo {
   background:#288b06;
 }
+.tag_activo {
+  background:#ef7206;
+}
 .row-sepatator {
-
   height: 20px;
+  background: #727272;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  font-weight: 600;
 }

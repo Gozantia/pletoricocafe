@@ -106,7 +106,6 @@ const Clientes = ({role}) => {
 
             console.log("respuesta del evento put", addVentatoDiaResponse);
             setIdDelDiaDeTrabajo(null); 
-            navigate(`/sistema/`);
           
         } catch (err) {
             console.error('Error al cerrar día', err);
@@ -517,9 +516,9 @@ useEffect(() => {
                         <th>Nombre</th>
                         <th>Productos</th>
                         <th>Total</th>
-                        <th>Estado</th>
-                        <th>Hora</th>                   
+                        <th>Estado</th>                           
                         <th>Acciones</th>
+                       
                     </tr>
                 </thead>
                 <tbody>
@@ -568,8 +567,9 @@ useEffect(() => {
                                 </>
                                 )}      
                          </td>   
-                         <td  className='tabla__prod-cantidad' > {nuevaMesa.TotalVenta }</td>  
-                         <td  className='tabla__prod-precio' colSpan="2" >
+                         <td  className='tabla__prod-cantidad' > {nuevaMesa.TotalVenta.toLocaleString('es-ES') }</td>  
+                         <td  className='tabla__prod-precio' >
+                         <div className="edit-estate">
                             <select
                                 value={nuevaMesa.Estado || 'Activo'} 
                                 onChange={(e) => handleInputNewMesa( 'Estado', e.target.value)}    
@@ -602,7 +602,8 @@ useEffect(() => {
                                     )}:
 
                              </>
-                            )}                                        
+                            )}   
+                        </div>                                     
                          </td>
                          <td  className='tabla__prod-precio' >
                           <button
@@ -615,7 +616,15 @@ useEffect(() => {
                     </> }
                 {mesasActivas.map((mesa, index) => (
                     <tr key={index} className="clientes_activos">
-                        <td  className='tabla__prod-nombre' >{mesa.Nombre}</td>
+                        <td  className='tabla__prod-nombre' >
+                            <h3>
+                            {mesa.Nombre}
+                            </h3>
+                            <span>
+                                {formatearHora(mesa.FechaCreacion)}
+                           </span>
+
+                        </td>
                         <td  className='tabla__prod-items' > 
                         <ul  onClick={() => abrirProdModal(mesa)} >
                             {mesa.Productos.map((prod, index) => (
@@ -626,7 +635,7 @@ useEffect(() => {
                            
                         </ul>
                         </td>
-                        <td  className='tabla__prod-cantidad' >${calcularValor(mesa.Productos)}</td>
+                        <td  className='tabla__prod-cantidad' >${calcularValor(mesa.Productos).toLocaleString('es-ES')}</td>
                         <td  className='tabla__prod-precio' >     
                             {editMode === mesa.id ? (
                                <div className="edit-estate">
@@ -659,10 +668,9 @@ useEffect(() => {
                                   )} 
                        </div>
                         ) : 
-                        <div onClick={() => handleEditClick(mesa)}> {mesa.Estado}</div>   
+                        <div onClick={() => handleEditClick(mesa)} className='mediopago-tag tag_activo'> {mesa.Estado}</div>   
                      }
                         </td>
-                        <td  className='tabla__prod-precio' >{formatearHora(mesa.FechaCreacion)}</td>
                         <td className=' item-actions'>
                         {editMode === mesa.id && (
                             <>
@@ -691,14 +699,22 @@ useEffect(() => {
                            </>
                             )}
                         </td>
+                       
                      </tr>
                     ))}
                     <tr>
-                        <td colSpan="6" className='row-sepatator'></td>
+                        <td colSpan="5" className='row-sepatator'> Clientes pagados</td>
                     </tr>
                     {mesasPagadas.map((mesa, index) => (
                     <tr key={index} className="clientes_pagados">
-                        <td  className='tabla__prod-nombre' >{mesa.Nombre}</td>
+                        <td  className='tabla__prod-nombre' >
+                            <h3>
+                            {mesa.Nombre}
+                            </h3>
+                            <span>
+                                {formatearHora(mesa.FechaCreacion)}
+                           </span>
+                        </td>
                         <td  className='tabla__prod-items' > 
                         <ul>
                             {mesa.Productos.map((prod, index) => (
@@ -712,18 +728,20 @@ useEffect(() => {
                             )
                         }    
                         </td>
-                        <td  className='tabla__prod-cantidad' > {mesa.TotalVenta} </td>
+                        <td  className='tabla__prod-cantidad' > {mesa.TotalVenta.toLocaleString('es-ES')} </td>
                         <td  className='tabla__prod-precio' >
                          {editMode === mesa.id ? (
                             <>
                             <div className="edit-estate">
                                   <select
-                                   value= "Pagado"
+                                   value= {mesaSeleccionada?.Estado || "Activo"}
                                    onChange={(e) => handleEditInputChange(e, "Estado")}
                                   >
                                    <option value="Pagado"> Pagado </option>
                                    <option value="Activo"> Activo </option>
                                   </select>
+                                  {mesaSeleccionada?.Estado =="Pagado" && (
+                                    <>
                                   <select
                                    value={mesaSeleccionada?.MedioPago || "efectivo"}
                                    onChange={(e) => handleEditInputChange(e, "MedioPago")}
@@ -743,13 +761,14 @@ useEffect(() => {
                                     <input type="number" placeholder="Monto en transferencia" value={mesaSeleccionada?.monto_transferencia || 0 } onChange={(e) => handleEditInputChange( e, 'monto_transferencia')} />
                                     </label>  
                                   </> 
-                                  )} 
+                                  )}      
+                                    </>
+                                  )}
+                                   
                             </div>
                             </>
                         ) :
                         <div className='edit-estate' onClick={role === 'manager' ? () => handleEditClick(mesa) : undefined}>
-                        
-                        {mesa.Estado} 
                         <div className={`mediopago-tag tag_${mesa.MedioPago.toLowerCase()}`}>
                             {mesa.MedioPago}
                         </div>
@@ -757,8 +776,7 @@ useEffect(() => {
                         </div>
                     }    
                          </td>
-                        <td  className='tabla__prod-precio' > {formatearHora(mesa.FechaCreacion)}</td>
-                        <td className=' item-actions'>
+                         <td className=' item-actions'>
                                 
                                 {editMode === mesa.id && (
                                 <>
@@ -787,7 +805,6 @@ useEffect(() => {
                             </>
                          )}
                            
-
                          </td>
                      </tr>
                     ))}
@@ -805,7 +822,7 @@ useEffect(() => {
             </div>   
             <div className= {`popup-actions popup-products-modal ${productPopUp ? "active" : ""}`}>
                 <div className="popup_actions-content">
-                <h3>   {modoEdicion && mesaSeleccionada?.Nombre ? `Orden de ${mesaSeleccionada?.Nombre}` : "Orden nueva"} ${calcularValor(productosSeleccionados)}</h3>
+                <h3>   {modoEdicion && mesaSeleccionada?.Nombre ? `Orden de ${mesaSeleccionada?.Nombre}` : "Orden nueva"} ${calcularValor(productosSeleccionados).toLocaleString('es-ES')}</h3>
                
                     <input 
                     type="text" 
